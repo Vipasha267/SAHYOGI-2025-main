@@ -3,8 +3,7 @@ const { Schema, model } = require('../connection');
 const mySchema = new Schema({
     name: String,
     email: { type: String, unique: true },
-    password: { type: String, required: true },
-    Role: { type: String, default: 'individual' },
+    password: { type: String, required: true },   
     bio: String,
     Government_ID:{type:Number, unique:true},
     address:String,

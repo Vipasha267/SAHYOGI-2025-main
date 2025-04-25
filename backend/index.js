@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const UserRouter = require('./routers/UserRouter');
+const UserRouter = require('./routers/userRouter');
 const NGORouter = require('./routers/ngoRouter');
+const SocialworkerRouter = require('./routers/socialworkerRouter');
 const cors = require('cors');
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cors({ origin : '*'}))
 app.use(express.json());
 app.use('/user',UserRouter);
 app.use('/ngo',NGORouter);
+app.use('/socialworker',SocialworkerRouter);
 //endpoint or root
 app.get('/',(req,res) =>{
 res.send('response from express');
