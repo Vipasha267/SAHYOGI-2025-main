@@ -4,6 +4,7 @@ const Model = require('../models/socialworkerModel');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+
 router.post('/add', (req, res) => {
   console.log(req.body);
   new Model(req.body).save()
@@ -30,10 +31,6 @@ router.get('/getbyemail/:email', (req, res) => {
 });
 
 
-//getall
-
-//getbyid
-//update
 router.delete('/delete/:id', (req, res) => {
   Model.findByIdAndDelete(req.params.id)
     .then((result) => {
@@ -43,6 +40,15 @@ router.delete('/delete/:id', (req, res) => {
       res.status(500).json(err);
     });
 });
+router.delete('/update/:id', (req, res) => {
+    Model.findByIdAndUpdate(req.params.id)
+      .then((result) => {
+        res.status(200).json(result);
+      }).catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+      });
+  });
 router.post('/authenticate', (req, res) => {
   Model.findOne(req.body)
     .then((result) => {
