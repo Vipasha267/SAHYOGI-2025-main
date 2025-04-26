@@ -10,7 +10,7 @@ const Navbar = () => {
                         {/* Logo */}
                         <Link
                             className="flex-none rounded-xl text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
-                            href="../templates/creative-agency/index.html"
+                            href="/"
                             aria-label="Preline"
 
                         >

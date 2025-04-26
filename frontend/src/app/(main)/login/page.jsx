@@ -1,6 +1,35 @@
+'use client'
+import axios from 'axios';
+import { useFormik } from 'formik'
+import { useRouter } from 'next/navigation';
 import React from 'react'
+import toast from 'react-hot-toast';
 
 const Login = () => {
+
+  const router = useRouter();
+
+  const loginForm = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    onSubmit: (values) => {
+      console.log(values);
+      axios.post('http://localhost:5000/user/authenticate', values)
+      .then((result) => {
+        console.log(result.data);
+        localStorage.setItem('token', result.data.token);
+        toast.success('Login successful');
+        router.push('/'); // Redirect to home page after successful login
+      }).catch((error) => {
+        console.log(error);
+        toast.error('Login failed');
+      // Perform login action here
+    })
+  },
+})
+
   return (
     <div className="relative h-screen">
       <img src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg" 
@@ -58,7 +87,7 @@ const Login = () => {
         Or
       </div>
       {/* Form */}
-      <form>
+      <form onSubmit={loginForm.handleSubmit}>
         <div className="grid gap-y-4">
           {/* Form Group */}
           <div>
@@ -73,6 +102,8 @@ const Login = () => {
                 type="email"
                 id="email"
                 name="email"
+                onChange={loginForm.handleChange}
+                value={loginForm.values.email}
                 className="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-lime-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                 required=""
                 aria-describedby="email-error"
@@ -108,6 +139,8 @@ const Login = () => {
                 type="password"
                 id="password"
                 name="password"
+                onChange={loginForm.handleChange}
+                value={loginForm.values.password}
                 className="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                 required=""
                 aria-describedby="password-error"
@@ -131,42 +164,7 @@ const Login = () => {
           </div>
           {/* End Form Group */}
           {/* Form Group */}
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block text-sm mb-2 dark:text-lime-500"
-            >
-              Confirm Password
-            </label>
-            <div className="relative">
-              <input
-                type="password"
-                id="confirm-password"
-                name="confirm-password"
-                className="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                required=""
-                aria-describedby="confirm-password-error"
-              />
-              <div className="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                <svg
-                  className="size-5 text-red-500"
-                  width={16}
-                  height={16}
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-                  aria-hidden="true"
-                >
-                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                </svg>
-              </div>
-            </div>
-            <p
-              className="hidden text-xs text-red-600 mt-2"
-              id="confirm-password-error"
-            >
-              Password does not match the password
-            </p>
-          </div>
+       
           {/* End Form Group */}
           {/* Checkbox */}
           <div className="flex items-center">
