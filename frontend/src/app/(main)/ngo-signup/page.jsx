@@ -130,7 +130,17 @@ const NgoSignup = () => {
       email: '',
       password: '',
       confirmPassword: '',
-    },
+      bio:'',
+      Government_ID:'',
+      Adress:'',
+      type_of_ngo:'',
+      year_of_experience:'',
+      ngo_name:'',
+      ngo_registered_number:'',
+      geographic_area_of_work:'',
+      proof_of_work:'',
+      
+  },
     validationSchema: Yup.object({
       name: Yup.string().required('Name is required'),
       email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -230,6 +240,169 @@ const NgoSignup = () => {
               <p className="mt-1 text-xs text-red-500">{formik.errors.confirmPassword}</p>
             ) : null}
           </div>
+          <div className="mb-4">
+            <label htmlFor="bio" className="block text-sm font-medium text-lime-500">
+              BIO
+            </label>
+            <input
+              id="bio"
+              name="bio"
+              type="bio"
+              placeholder="Right something about your NGO"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.bio}
+            />
+            {formik.touched.bio && formik.errors.bio ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.name}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="Government_ID" className="block text-sm font-medium text-lime-500">
+            Government_ID
+            </label>
+            <input
+              id="Government_ID"
+              name="Government_ID"
+              type="NUMBER"
+              placeholder="Government_ID"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.Government_ID}
+            />
+            {formik.touched.Government_ID&& formik.errors.Government_ID ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.Government_ID}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="adress" className="block text-sm font-medium text-lime-500">
+              Adress
+            </label>
+            <input
+              id="adress"
+              name="adress"
+              type="adress"
+              placeholder="Enter your Adress"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.adress}
+            />
+            {formik.touched.adress&& formik.errors.adress ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.adress}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="type_of_ngo" className="block text-sm font-medium text-lime-500">
+            Type_of_ngo
+            </label>
+            <input
+              id="type_of_ngo"
+              name="type_of_ngo"
+              type="text"
+              placeholder="Enter your type_of_ngo"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.type_of_ngo}
+            />
+            {formik.touched. type_of_ngo&& formik.errors.type_of_ngo ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.type_of_ngo}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="year_of_experience" className="block text-sm font-medium text-lime-500">
+            Year_of_experience
+            </label>
+            <input
+              id="year_of_experience"
+              name="year_of_experience"
+              type="NUMBER"
+              placeholder="Enter your year_of_experience"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.year_of_experience}
+            />
+            {formik.touched.year_of_experience&& formik.errors.year_of_experience ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.year_of_experience}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="ngo_name" className="block text-sm font-medium text-lime-500">
+            NGO_name
+            </label>
+            <input
+              id="ngo_name"
+              name="ngo_name"
+              type="text"
+              placeholder="Enter your ngo_name"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.ngo_name}
+            />
+            {formik.touched.ngo_name&& formik.errors.ngo_name ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.ngo_name}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="ngo_registered_number" className="block text-sm font-medium text-lime-500">
+            NGO_registered_number
+            </label>
+            <input
+              id="ngo_registered_number"
+              name="ngo_registered_number"
+              type="NUMBER"
+              placeholder="Enter your ngo_registered_number"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.ngo_registered_number}
+            />
+            {formik.touched.ngo_registered_number&& formik.errors.ngo_registered_number ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.ngo_registered_number}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="geographic_area_of_work" className="block text-sm font-medium text-lime-500">
+            Geographic_area_of_work
+            </label>
+            <input
+              id="geographic_area_of_work"
+              name="geographic_area_of_work"
+              type="text"
+              placeholder="Enter your geographic_area_of_work"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.geographic_area_of_work}
+            />
+            {formik.touched.geographic_area_of_work&& formik.errors.geographic_area_of_work ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.geographic_area_of_work}</p>
+            ) : null}
+          </div> 
+          <div className="mb-4">
+            <label htmlFor="proof_of_work" className="block text-sm font-medium text-lime-500">
+            Proof_of_work
+            </label>
+            <input
+              id="proof_of_work"
+              name="proof_of_work"
+              type="text"
+              placeholder="Enter your proof_of_work"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.proof_of_work}
+            />
+            {formik.touched.proof_of_work&& formik.errors.proof_of_work? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.proof_of_work}</p>
+            ) : null}
+          </div>
+
           <button
             type="submit"
             className="w-full px-4 py-2 text-black bg-lime-500 rounded-md hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-lime-500"
