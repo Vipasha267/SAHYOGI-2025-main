@@ -36,13 +36,13 @@ const Login = () => {
       className="absolute inset-0 object-cover w-full h-full" alt="" />
       <div className="relative bg-opacity-75 bg-lime-500/70 h-full py-10">
       
-      <div className=" mr-150 ml-150 bg-white border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
+      <div className=" mr-150 ml-150 bg-black border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
   <div className="p-4 sm:p-7">
     <div className="text-center">
-      <h1 className="block text-2xl font-bold text-gray-800 dark:text-lime-500">
+      <h1 className="block text-2xl font-bold text-lime-500 dark:text-lime-500">
         Sign in
       </h1>
-      <p className="mt-2 text-sm text-gray-600 dark:text-neutral-400">
+      <p className="mt-2 text-sm text-lime-600 dark:text-neutral-400">
         Already have an account?
         <a
           className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
@@ -55,7 +55,7 @@ const Login = () => {
     <div className="mt-5">
       <button
         type="button"
-        className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
+        className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-lime-200 bg-white text-black shadow-2xs hover:bg-lime-500 focus:outline-hidden focus:bg-lime-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800"
       >
         <svg
           className="w-4 h-auto"
@@ -93,7 +93,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm mb-2 dark:text-lime-500"
+              className="block text-sm mb-2 text-lime-500"
             >
               Email address
             </label>
@@ -130,7 +130,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm mb-2 dark:text-lime-500"
+              className="block text-sm mb-2 text-lime-500"
             >
               Password
             </label>
@@ -177,7 +177,7 @@ const Login = () => {
               />
             </div>
             <div className="ms-3">
-              <label htmlFor="remember-me" className="text-sm dark:text-white">
+              <label htmlFor="remember-me" className="text-sm text-lime-500">
                 I accept the{" "}
                 <a
                   className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"

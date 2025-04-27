@@ -70,7 +70,7 @@ const Contact = () => {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full bg-white rounded border border-gray-300 focus:border-green-700 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-white rounded border border-gray-300 focus:border-lime-700 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
                 />
               </div>
               <div className="relative mb-4">
@@ -80,12 +80,12 @@ const Contact = () => {
                 <textarea
                   id="message"
                   name="message"
-                  className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                  className="w-full bg-white rounded border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
                   defaultValue={""}
                 />
               </div>
-              <button className="text-white bg-green-700 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">
-                Button
+              <button className="text-white bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded text-lg">
+                Submit
               </button>
               <p className="text-xs text-gray-700 mt-3" />
             </div>

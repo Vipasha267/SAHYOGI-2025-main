@@ -87,7 +87,7 @@ export default function NGOProfile() {
               <p className="text-sm text-gray-500">Active since {formatDate(ngoData.createdAt)}</p>
             </div>
             <div className="mt-4 md:mt-0">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
+              <button className="bg-lime-500 hover:bg-lime-700 text-white font-medium py-2 px-4 rounded-lg">
                 Follow
               </button>
             </div>
@@ -101,7 +101,7 @@ export default function NGOProfile() {
           <button
             onClick={() => setActiveTab('about')}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'about' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             About
@@ -109,7 +109,7 @@ export default function NGOProfile() {
           <button
             onClick={() => setActiveTab('posts')}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'posts' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             Posts
@@ -117,7 +117,7 @@ export default function NGOProfile() {
           <button
             onClick={() => setActiveTab('followers')}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'followers' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             Followers
@@ -198,7 +198,7 @@ export default function NGOProfile() {
                       <Calendar size={16} className="mr-1" /> {post.comments} comments
                     </span>
                   </div>
-                  <button className="text-blue-600 text-sm font-medium hover:text-blue-800">
+                  <button className="text-lime-600 text-sm font-medium hover:text-lime-800">
                     View Post
                   </button>
                 </div>
@@ -218,9 +218,9 @@ export default function NGOProfile() {
                     follower.type === 'user' ? 'bg-blue-100' : 'bg-purple-100'
                   }`}>
                     {follower.type === 'user' ? (
-                      <User size={20} className="text-blue-600" />
+                      <User size={20} className="text-lime-600" />
                     ) : (
-                      <Users size={20} className="text-purple-600" />
+                      <Users size={20} className="text-lime-700" />
                     )}
                   </div>
                   <div>

@@ -78,7 +78,7 @@ export default function SocialWorkerProfile() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="bg-purple-100 rounded-full p-6 mb-4 md:mb-0 md:mr-6">
-              <User size={64} className="text-purple-600" />
+              <User size={64} className="text-lime-600" />
             </div>
             <div className="text-center md:text-left md:flex-1">
               <h1 className="text-2xl font-bold">{workerData.name}</h1>
@@ -86,7 +86,7 @@ export default function SocialWorkerProfile() {
               <p className="text-sm text-gray-500">{workerData.year_of_experience} years of experience</p>
             </div>
             <div className="mt-4 md:mt-0">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
+              <button className="bg-lime-600 hover:bg-lime-700 text-white font-medium py-2 px-4 rounded-lg">
                 Follow
               </button>
             </div>
@@ -100,7 +100,7 @@ export default function SocialWorkerProfile() {
           <button
             onClick={() => setActiveTab('about')}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'about' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             About
@@ -108,7 +108,7 @@ export default function SocialWorkerProfile() {
           <button
             onClick={() => setActiveTab('posts')}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'posts' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             Posts
@@ -116,7 +116,7 @@ export default function SocialWorkerProfile() {
           <button
             onClick={() => setActiveTab('followers')}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'followers' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             Followers
@@ -200,7 +200,7 @@ export default function SocialWorkerProfile() {
                       <MessageSquare size={16} className="mr-1" /> {post.comments} comments
                     </span>
                   </div>
-                  <button className="text-blue-600 text-sm font-medium hover:text-blue-800">
+                  <button className="text-lime-600 text-sm font-medium hover:text-lime-800">
                     View Post
                   </button>
                 </div>
@@ -221,11 +221,11 @@ export default function SocialWorkerProfile() {
                     follower.type === 'ngo' ? 'bg-green-100' : 'bg-purple-100'
                   }`}>
                     {follower.type === 'user' ? (
-                      <User size={20} className="text-blue-600" />
+                      <User size={20} className="text-lime-600" />
                     ) : follower.type === 'ngo' ? (
                       <Building size={20} className="text-green-600" />
                     ) : (
-                      <Users size={20} className="text-purple-600" />
+                      <Users size={20} className="text-lime-600" />
                     )}
                   </div>
                   <div>

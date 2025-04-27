@@ -42,11 +42,11 @@ export default function AdminProfile() {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Header/Profile Info */}
-      <div className="bg-white shadow">
+      <div className="bg-gray-100 shadow">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="bg-blue-100 rounded-full p-6 mb-4 md:mb-0 md:mr-6">
-              <User size={64} className="text-blue-600" />
+              <User size={64} className="text-lime-600" />
             </div>
             <div className="text-center md:text-left">
               <h1 className="text-2xl font-bold">{adminData.name}</h1>
@@ -64,7 +64,7 @@ export default function AdminProfile() {
           <button
             onClick={() => setActiveTab('users')}
             className={`px-4 py-2 font-medium ${activeTab === 'users' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             <div className="flex items-center">
@@ -75,7 +75,7 @@ export default function AdminProfile() {
           <button
             onClick={() => setActiveTab('ngos')}
             className={`px-4 py-2 font-medium ${activeTab === 'ngos' 
-              ? 'border-b-2 border-blue-500 text-blue-600' 
+              ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
             <div className="flex items-center">
@@ -95,7 +95,7 @@ export default function AdminProfile() {
               <div key={user.id} className="bg-white rounded-lg shadow p-6 hover:shadow-md transition">
                 <h3 className="font-bold">{user.name}</h3>
                 <p className="text-gray-600">{user.email}</p>
-                <button className="text-blue-600 text-sm font-medium hover:text-blue-800">
+                <button className="text-lime-600 text-sm font-medium hover:text-lime-800">
                   View Profile
                 </button>
               </div>
@@ -110,7 +110,7 @@ export default function AdminProfile() {
               <div key={ngo.id} className="bg-white rounded-lg shadow p-6 hover:shadow-md transition">
                 <h3 className="font-bold">{ngo.name}</h3>
                 <p className="text-gray-600">{ngo.type}</p>
-                <button className="text-blue-600 text-sm font-medium hover:text-blue-800">
+                <button className="text-lime-600 text-sm font-medium hover:text-lime-800">
                   View Profile
                 </button>
               </div>
@@ -119,5 +119,6 @@ export default function AdminProfile() {
         )}
       </div>
     </div>
+
   );
 }
