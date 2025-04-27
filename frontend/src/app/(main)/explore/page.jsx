@@ -11,6 +11,25 @@ const ExplorePage = () => {
   const [filteredSahyogis, setFilteredSahyogis] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [ngoList, setNgoList] = useState([]);
+
+  const fetchNGOs = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/ngo/getall`);
+      console.log(response.data);
+
+      setNgoList(response.data);
+    } catch (error) {
+      console.error('Error fetching NGOs:', error);
+      toast.error('Failed to load NGOs');
+    }
+  }
+
+  useEffect(() => {
+    // fetchNGOs();
+  }, []);
+
+
   const filterForm = useFormik({
     initialValues: {
       searchQuery: '',
@@ -31,8 +50,8 @@ const ExplorePage = () => {
   const fetchSahyogis = async () => {
     try {
       const [ngosRes, workersRes] = await Promise.all([
-        axios.get('http://localhost:5000/ngo/getall'),
-        axios.get('http://localhost:5000/socialworker/getall')
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/ngo/getall`),
+        // axios.get('http://localhost:5000/socialworker/getall')
       ]);
 
       const ngos = ngosRes.data.map(ngo => ({
@@ -64,7 +83,7 @@ const ExplorePage = () => {
     // Filter by search query
     if (values.searchQuery) {
       const query = values.searchQuery.toLowerCase();
-      filtered = filtered.filter(s => 
+      filtered = filtered.filter(s =>
         s.name?.toLowerCase().includes(query) ||
         s.type_of_SocialWork?.toLowerCase().includes(query) ||
         s.bio?.toLowerCase().includes(query)
@@ -73,14 +92,14 @@ const ExplorePage = () => {
 
     // Filter by area of work
     if (values.areaOfWork) {
-      filtered = filtered.filter(s => 
+      filtered = filtered.filter(s =>
         s.type_of_SocialWork?.toLowerCase().includes(values.areaOfWork.toLowerCase())
       );
     }
 
     // Filter by location
     if (values.location) {
-      filtered = filtered.filter(s => 
+      filtered = filtered.filter(s =>
         s.geographic_area_of_Work?.toLowerCase().includes(values.location.toLowerCase()) ||
         s.address?.toLowerCase().includes(values.location.toLowerCase())
       );
@@ -133,8 +152,8 @@ const ExplorePage = () => {
           <Clock size={16} className="mr-1" />
           {sahyogi.year_of_experience} years experience
         </div>
-        <Link 
-          href={`/sahyogi/${sahyogi._id}`} 
+        <Link
+          href={`/sahyogi/${sahyogi._id}`}
           className="text-lime-600 hover:text-lime-700 font-medium text-sm"
         >
           View Profile →
