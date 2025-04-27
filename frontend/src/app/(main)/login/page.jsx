@@ -36,13 +36,13 @@ const Login = () => {
       className="absolute inset-0 object-cover w-full h-full" alt="" />
       <div className="relative bg-opacity-75 bg-lime-500/70 h-full py-10">
       
-      <div className=" mr-150 ml-150 bg-black border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
+      <div className=" mr-150 ml-150 bg-white border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
   <div className="p-4 sm:p-7">
     <div className="text-center">
-      <h1 className="block text-2xl font-bold text-lime-500 dark:text-lime-500">
+      <h1 className="block text-2xl font-bold text-black dark:text-black-200">
         Sign in
       </h1>
-      <p className="mt-2 text-sm text-lime-600 dark:text-neutral-400">
+      <p className="mt-2 text-sm text-black dark:text-neutral-400">
         Already have an account?
         <a
           className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
@@ -93,7 +93,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm mb-2 text-lime-500"
+              className="block text-sm mb-2 text-black dark:text-neutral-400"
             >
               Email address
             </label>
@@ -104,7 +104,7 @@ const Login = () => {
                 name="email"
                 onChange={loginForm.handleChange}
                 value={loginForm.values.email}
-                className="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-lime-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
                 required=""
                 aria-describedby="email-error"
               />
@@ -130,7 +130,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm mb-2 text-lime-500"
+              className="block text-sm mb-2 text-black"
             >
               Password
             </label>
@@ -141,7 +141,7 @@ const Login = () => {
                 name="password"
                 onChange={loginForm.handleChange}
                 value={loginForm.values.password}
-                className="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
                 required=""
                 aria-describedby="password-error"
               />
@@ -177,7 +177,7 @@ const Login = () => {
               />
             </div>
             <div className="ms-3">
-              <label htmlFor="remember-me" className="text-sm text-lime-500">
+              <label htmlFor="remember-me" className="text-sm text-black">
                 I accept the{" "}
                 <a
                   className="text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"

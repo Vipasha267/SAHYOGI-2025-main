@@ -86,22 +86,22 @@ const Signup = () => {
                   </a>
                 </div>
                 <div className="w-full max-w-xl xl:px-8 xl:w-5/12">
-                  <div className="bg-black rounded shadow-2xl p-7 sm:p-10">
-                    <h3 className="mb-4 text-lime-500 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">
+                  <div className="bg-white rounded shadow-2xl p-7 sm:p-10">
+                    <h3 className="mb-4 text-black text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">
                       Sign up
                     </h3>
                     <form onSubmit={formik.handleSubmit}>
                       <div className="mb-1 sm:mb-2">
                         <label
                           htmlFor="name"
-                          className="inline-block text-lime-500 mb-1 font-medium"
+                          className="inline-block text-black mb-1 font-medium"
                         >
                           Name
                         </label>
                         <input
                           placeholder="Name"
                           type="text"
-                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-lime-500"
                           id="name"
                           name="name"
                           onChange={formik.handleChange}
@@ -115,14 +115,14 @@ const Signup = () => {
                       <div className="mb-1 sm:mb-2">
                         <label
                           htmlFor="email"
-                          className="inline-block text-lime-500 mb-1 font-medium"
+                          className="inline-block text-black mb-1 font-medium"
                         >
                           Email
                         </label>
                         <input
                           placeholder="Email"
                           type="email"
-                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-lime-500"
                           id="email"
                           name="email"
                           onChange={formik.handleChange}
@@ -136,14 +136,14 @@ const Signup = () => {
                       <div className="mb-1 sm:mb-2">
                         <label
                           htmlFor="password"
-                          className="inline-block text-lime-500 mb-1 font-medium"
+                          className="inline-block text-black mb-1 font-medium"
                         >
                           Password
                         </label>
                         <input
                           placeholder="Password"
                           type="password"
-                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-lime-500"
                           id="password"
                           name="password"
                           onChange={formik.handleChange}
@@ -157,14 +157,14 @@ const Signup = () => {
                       <div className="mb-1 sm:mb-2">
                         <label
                           htmlFor="confirmPassword"
-                          className="inline-block text-lime-500 mb-1 font-medium"
+                          className="inline-block text-black mb-1 font-medium"
                         >
                           Confirm Password
                         </label>
                         <input
                           placeholder="Confirm Password"
                           type="password"
-                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline"
+                          className="flex-grow w-full h-12 px-4 mb-2 transition duration-200 bg-white border border-gray-300 rounded shadow-sm appearance-none focus:border-deep-purple-accent-400 focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-lime-500"
                           id="confirmPassword"
                           name="confirmPassword"
                           onChange={formik.handleChange}

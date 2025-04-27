@@ -155,11 +155,11 @@ const NgoSignup = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-black rounded shadow-md">
+      <div className="w-full p-8 space-y-4 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold text-center text-lime-500">NGO Signup</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="name" className="block text-sm font-medium text-black">
               Name
             </label>
             <input
@@ -177,7 +177,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="email" className="block text-sm font-medium text-black">
               Email
             </label>
             <input
@@ -195,7 +195,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="password" className="block text-sm font-medium text-black">
               Password
             </label>
             <input
@@ -213,7 +213,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-black">
               Confirm Password
             </label>
             <input
