@@ -399,7 +399,8 @@ const NgoSignup = () => {
               value={formik.values.proof_of_work}
             />
             {formik.touched.proof_of_work&& formik.errors.proof_of_work? (
-              <p className="mt-1 text-xs text-red-500">{formik.errors.proof_of_work}</p>
+              <p className="mt-1 text-xs text-red-500">{formik.errors.proof_of_work
+              }</p>
             ) : null}
           </div>
 
