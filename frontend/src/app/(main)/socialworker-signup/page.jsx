@@ -41,11 +41,11 @@ const SocialworkerSignup = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-black rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center text-lime-500">NGO Signup</h2>
+      <div className="w-full p-8 space-y-4 bg-white rounded shadow-md">
+        <h2 className="text-2xl font-bold text-center text-black">NGO Signup</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="name" className="block text-sm font-medium text-black">
               Name
             </label>
             <input
@@ -63,7 +63,7 @@ const SocialworkerSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="email" className="block text-sm font-medium text-black">
               Email
             </label>
             <input
@@ -81,7 +81,7 @@ const SocialworkerSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="password" className="block text-sm font-medium text-black">
               Password
             </label>
             <input
@@ -99,7 +99,7 @@ const SocialworkerSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-black">
               Confirm Password
             </label>
             <input
@@ -117,7 +117,7 @@ const SocialworkerSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="address" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="address" className="block text-sm font-medium text-black">
               Address
             </label>
             <input
@@ -134,8 +134,8 @@ const SocialworkerSignup = () => {
               <p className="mt-1 text-xs text-red-500">{formik.errors.address}</p>
             ) : null}
           </div>
-            <div className="mb-4">
-                <label htmlFor="exp" className="block text-sm font-medium text-lime-500">
+                <div className="mb-4">
+                <label htmlFor="exp" className="block text-sm font-medium text-black">
                 Experience
                 </label>
                 <input
@@ -153,25 +153,7 @@ const SocialworkerSignup = () => {
                 ) : null}
                 </div>
                 <div className="mb-4">
-                <label htmlFor="exp" className="block text-sm font-medium text-lime-500">
-                Experience
-                </label>
-                <input
-                id="exp"
-                name="exp"
-                type="text"
-                placeholder="Enter your experience"
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.exp}
-                />
-                {formik.touched.exp && formik.errors.exp ? (
-                <p className="mt-1 text-xs text-red-500">{formik.errors.exp}</p>
-                ) : null}
-                </div>
-                <div className="mb-4">
-                <label htmlFor="geography" className="block text-sm font-medium text-lime-500">
+                <label htmlFor="geography" className="block text-sm font-medium text-black">
                 Geography
                 </label>
                 <input
@@ -189,7 +171,7 @@ const SocialworkerSignup = () => {
                 ) : null}
                 </div>
                 <div className="mb-4">
-                <label htmlFor="Description" className="block text-sm font-medium text-lime-500">
+                <label htmlFor="Description" className="block text-sm font-medium text-black">
                 Bio
                 </label>
                 <input
@@ -207,7 +189,7 @@ const SocialworkerSignup = () => {
                 ) : null}
                 </div>
                 <div className="mb-4">
-                <label htmlFor="Affiliated to" className="block text-sm font-medium text-lime-500">
+                <label htmlFor="Affiliated to" className="block text-sm font-medium text-black">
                 Affiliated to
                 </label>
                 <input
