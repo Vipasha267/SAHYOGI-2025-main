@@ -1,100 +1,317 @@
-import React from 'react'
+'use client';
+import { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { Send, Upload } from 'lucide-react';
 
-const Contact = () => {
+const ContactPage = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  
+  const contactForm = useFormik({
+    initialValues: {
+      fullName: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: '',
+      isSocialWorker: false,
+      inquiryType: '',
+      document: null
+    },
+    validationSchema: Yup.object({
+      fullName: Yup.string()
+        .required('Full name is required')
+        .min(2, 'Name must be at least 2 characters'),
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      phone: Yup.string()
+        .matches(/^[0-9]{10}$/, 'Please enter a valid 10-digit phone number'),
+      subject: Yup.string()
+        .required('Subject is required')
+        .min(3, 'Subject must be at least 3 characters'),
+      message: Yup.string()
+        .required('Message is required')
+        .min(10, 'Message must be at least 10 characters'),
+      inquiryType: Yup.string()
+        .required('Please select an inquiry type'),
+      document: Yup.mixed()
+        .test('fileSize', 'File is too large', (value) => {
+          if (!value) return true;
+          return value.size <= 5000000; // 5MB limit
+        })
+        .test('fileType', 'Unsupported file type', (value) => {
+          if (!value) return true;
+          return ['application/pdf', 'image/jpeg', 'image/png'].includes(value.type);
+        })
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      setIsSubmitting(true);
+      try {
+        const formData = new FormData();
+        Object.keys(values).forEach(key => {
+          if (key === 'document' && values[key]) {
+            formData.append(key, values[key]);
+          } else {
+            formData.append(key, values[key]);
+          }
+        });
+
+        await axios.post('http://localhost:5000/contact/submit', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        toast.success('Thank you for contacting us! We will get back to you soon.');
+        resetForm();
+      } catch (error) {
+        console.error('Contact form submission error:', error);
+        toast.error('Failed to submit form. Please try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  });
+
+  const handleFileChange = (event) => {
+    const file = event.currentTarget.files[0];
+    contactForm.setFieldValue('document', file);
+  };
 
   return (
-    <div>
-      <>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <h1 className="text-6xl text-center">Contact Us...</h1>
-        <section className="text-gray-600 body-font relative">
-          <div className="container px-5 py-24 mx-auto flex sm:flex-nowrap flex-wrap">
-            <div className="lg:w-2/3 md:w-1/2 bg-gray-300 rounded-lg overflow-hidden sm:mr-10 p-10 flex items-end justify-start relative">
-              <iframe
-                width="100%"
-                height="100%"
-                className="absolute inset-0"
-                frameBorder={0}
-                title="map"
-                marginHeight={0}
-                marginWidth={0}
-                scrolling="no"
-                src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
-                style={{ filter: "grayscale(1) contrast(1.2) opacity(0.4)" }}
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="container mx-auto px-4 max-w-3xl">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Contact Us</h1>
+            <p className="mt-2 text-gray-600">
+              Have questions? We'd love to hear from you.
+            </p>
+          </div>
+
+          <form onSubmit={contactForm.handleSubmit} className="space-y-6">
+            {/* Full Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                {...contactForm.getFieldProps('fullName')}
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                  contactForm.touched.fullName && contactForm.errors.fullName
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                }`}
               />
-              <div className="bg-white relative flex flex-wrap py-6 rounded shadow-md">
-                <div className="lg:w-1/2 px-6">
-                  <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">
-                    ADDRESS
-                  </h2>
-                  <p className="mt-1">Hazrat Ganj, Lucknow</p>
-                </div>
-                <div className="lg:w-1/2 px-6 mt-4 lg:mt-0">
-                  <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">
-                    EMAIL
-                  </h2>
-                  <a className="text-green-500 leading-relaxed">example@email.com</a>
-                  <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs mt-4">
-                    PHONE
-                  </h2>
-                  <p className="leading-relaxed">123-456-7890</p>
-                </div>
-              </div>
+              {contactForm.touched.fullName && contactForm.errors.fullName && (
+                <p className="mt-1 text-sm text-red-500">{contactForm.errors.fullName}</p>
+              )}
             </div>
-            <div className="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-              <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">
-                Feedback
-              </h2>
-              <p className="leading-relaxed mb-5 text-gray-600">
-                Post-ironic portland shabby chic echo park, banjo fashion axe
-              </p>
-              <div className="relative mb-4">
-                <label htmlFor="name" className="leading-7 text-sm text-gray-600">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full bg-white rounded border border-gray-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                />
-              </div>
-              <div className="relative mb-4">
-                <label htmlFor="email" className="leading-7 text-sm text-gray-600">
-                  Email
+
+            {/* Email & Phone Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
-                  id="email"
                   name="email"
-                  className="w-full bg-white rounded border border-gray-300 focus:border-lime-700 focus:ring-2 focus:ring-green-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  {...contactForm.getFieldProps('email')}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                    contactForm.touched.email && contactForm.errors.email
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  }`}
                 />
+                {contactForm.touched.email && contactForm.errors.email && (
+                  <p className="mt-1 text-sm text-red-500">{contactForm.errors.email}</p>
+                )}
               </div>
-              <div className="relative mb-4">
-                <label htmlFor="message" className="leading-7 text-sm text-gray-600">
-                  Message
+
+              {/* Phone */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
                 </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  className="w-full bg-white rounded border border-gray-300 focus:border-lime-500 focus:ring-2 focus:ring-lime-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
-                  defaultValue={""}
+                <input
+                  type="tel"
+                  name="phone"
+                  {...contactForm.getFieldProps('phone')}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                    contactForm.touched.phone && contactForm.errors.phone
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  }`}
                 />
+                {contactForm.touched.phone && contactForm.errors.phone && (
+                  <p className="mt-1 text-sm text-red-500">{contactForm.errors.phone}</p>
+                )}
               </div>
-              <button className="text-white bg-lime-500 border-0 py-2 px-6 focus:outline-none hover:bg-lime-600 rounded text-lg">
-                Submit
-              </button>
-              <p className="text-xs text-gray-700 mt-3" />
             </div>
-          </div>
-        </section>
-      </>
 
+            {/* Subject & Inquiry Type Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Subject */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Subject <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="subject"
+                  {...contactForm.getFieldProps('subject')}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                    contactForm.touched.subject && contactForm.errors.subject
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  }`}
+                />
+                {contactForm.touched.subject && contactForm.errors.subject && (
+                  <p className="mt-1 text-sm text-red-500">{contactForm.errors.subject}</p>
+                )}
+              </div>
+
+              {/* Inquiry Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Type of Inquiry <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="inquiryType"
+                  {...contactForm.getFieldProps('inquiryType')}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                    contactForm.touched.inquiryType && contactForm.errors.inquiryType
+                      ? 'border-red-500'
+                      : 'border-gray-300'
+                  }`}
+                >
+                  <option value="">Select type</option>
+                  <option value="Volunteering">Volunteering</option>
+                  <option value="Feedback">Feedback</option>
+                  <option value="Collaboration">Collaboration</option>
+                  <option value="Report Issue">Report Issue</option>
+                  <option value="Other">Other</option>
+                </select>
+                {contactForm.touched.inquiryType && contactForm.errors.inquiryType && (
+                  <p className="mt-1 text-sm text-red-500">{contactForm.errors.inquiryType}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Message */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Message <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                name="message"
+                rows="4"
+                {...contactForm.getFieldProps('message')}
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                  contactForm.touched.message && contactForm.errors.message
+                    ? 'border-red-500'
+                    : 'border-gray-300'
+                }`}
+              />
+              {contactForm.touched.message && contactForm.errors.message && (
+                <p className="mt-1 text-sm text-red-500">{contactForm.errors.message}</p>
+              )}
+            </div>
+
+            {/* Social Worker Radio */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Are you a social worker?
+              </label>
+              <div className="flex space-x-4">
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="isSocialWorker"
+                    value="true"
+                    onChange={() => contactForm.setFieldValue('isSocialWorker', true)}
+                    checked={contactForm.values.isSocialWorker === true}
+                    className="mr-2"
+                  />
+                  Yes
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="isSocialWorker"
+                    value="false"
+                    onChange={() => contactForm.setFieldValue('isSocialWorker', false)}
+                    checked={contactForm.values.isSocialWorker === false}
+                    className="mr-2"
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+
+            {/* File Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Upload Document (Optional)
+              </label>
+              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+                <div className="space-y-1 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label className="relative cursor-pointer bg-white rounded-md font-medium text-lime-600 hover:text-lime-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        name="document"
+                        onChange={handleFileChange}
+                        className="sr-only"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    PDF, PNG, JPG up to 5MB
+                  </p>
+                </div>
+              </div>
+              {contactForm.touched.document && contactForm.errors.document && (
+                <p className="mt-1 text-sm text-red-500">{contactForm.errors.document}</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-lime-600 hover:bg-lime-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500 ${
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {isSubmitting ? (
+                <div className="flex items-center">
+                  <div className="animate-spin mr-2 h-5 w-5 border-2 border-white border-t-transparent rounded-full"></div>
+                  Sending...
+                </div>
+              ) : (
+                <div className="flex items-center">
+                  <Send className="w-5 h-5 mr-2" />
+                  Send Message
+                </div>
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Contact
+export default ContactPage;

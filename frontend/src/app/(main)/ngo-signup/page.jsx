@@ -166,7 +166,7 @@ const NgoSignup = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full p-8 space-y-4 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center text-lime-500">NGO Signup</h2>
+        <h2 className="text-2xl font-bold text-center text-black">NGO Signup</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="block text-sm font-medium text-black">
@@ -241,14 +241,14 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="bio" className="block text-sm font-medium text-lime-500">
-              BIO
+            <label htmlFor="bio" className="block text-sm font-medium text-black">
+              Bio
             </label>
             <input
               id="bio"
               name="bio"
               type="bio"
-              placeholder="Right something about your NGO"
+              placeholder="write something about your NGO"
               className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -259,7 +259,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="Government_ID" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="Government_ID" className="block text-sm font-medium text-black">
             Government_ID
             </label>
             <input
@@ -277,7 +277,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="adress" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="adress" className="block text-sm font-medium text-black">
               Adress
             </label>
             <input
@@ -295,7 +295,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="type_of_ngo" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="type_of_ngo" className="block text-sm font-medium text-black">
             Type_of_ngo
             </label>
             <input
@@ -313,7 +313,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="year_of_experience" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="year_of_experience" className="block text-sm font-medium text-black">
             Year_of_experience
             </label>
             <input
@@ -331,7 +331,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="ngo_name" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="ngo_name" className="block text-sm font-medium text-black">
             NGO_name
             </label>
             <input
@@ -349,7 +349,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="ngo_registered_number" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="ngo_registered_number" className="block text-sm font-medium text-black">
             NGO_registered_number
             </label>
             <input
@@ -367,7 +367,7 @@ const NgoSignup = () => {
             ) : null}
           </div>
           <div className="mb-4">
-            <label htmlFor="geographic_area_of_work" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="geographic_area_of_work" className="block text-sm font-medium text-black">
             Geographic_area_of_work
             </label>
             <input
@@ -385,7 +385,7 @@ const NgoSignup = () => {
             ) : null}
           </div> 
           <div className="mb-4">
-            <label htmlFor="proof_of_work" className="block text-sm font-medium text-lime-500">
+            <label htmlFor="proof_of_work" className="block text-sm font-medium text-black">
             Proof_of_work
             </label>
             <input

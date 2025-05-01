@@ -5,6 +5,8 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Building, User, Search, MapPin, Clock, Award } from 'lucide-react';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { Briefcase, Calendar, Users } from 'lucide-react';
 
 const ExplorePage = () => {
   const [sahyogis, setSahyogis] = useState([]);
@@ -51,7 +53,7 @@ const ExplorePage = () => {
     try {
       const [ngosRes, workersRes] = await Promise.all([
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/ngo/getall`),
-        // axios.get('http://localhost:5000/socialworker/getall')
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/socialworker/getall`)
       ]);
 
       const ngos = ngosRes.data.map(ngo => ({
@@ -153,7 +155,9 @@ const ExplorePage = () => {
           {sahyogi.year_of_experience} years experience
         </div>
         <Link
-          href={`/sahyogi/${sahyogi._id}`}
+          href={sahyogi.type === 'ngo' 
+            ? `/ngo-profile/${sahyogi._id}` 
+            : `/socialworker/${sahyogi._id}`}
           className="text-lime-600 hover:text-lime-700 font-medium text-sm"
         >
           View Profile →
@@ -263,3 +267,119 @@ const ExplorePage = () => {
 };
 
 export default ExplorePage;
+
+export function SocialWorkerProfile() {
+  const { id } = useParams();
+  const [workerData, setWorkerData] = useState(null);
+  const [activeTab, setActiveTab] = useState('about');
+
+  useEffect(() => {
+    const fetchWorkerData = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/socialworker/${id}`);
+        setWorkerData(response.data);
+      } catch (error) {
+        console.error('Error fetching social worker data:', error);
+        toast.error('Failed to load profile');
+      }
+    };
+
+    fetchWorkerData();
+  }, [id]);
+
+  if (!workerData) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+
+  return (
+    <div className="bg-gray-100 min-h-screen">
+      {/* Header/Profile Info */}
+      <div className="bg-white shadow">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="bg-purple-100 rounded-full p-6 mb-4 md:mb-0 md:mr-6">
+              <User size={64} className="text-purple-600" />
+            </div>
+            <div className="text-center md:text-left md:flex-1">
+              <h1 className="text-2xl font-bold">{workerData.name}</h1>
+              <p className="text-gray-600">{workerData.type_of_SocialWork}</p>
+              <div className="flex items-center justify-center md:justify-start mt-2">
+                <MapPin size={16} className="text-gray-500 mr-1" />
+                <span className="text-gray-500">{workerData.address}</span>
+              </div>
+            </div>
+            <div className="mt-4 md:mt-0">
+              <button className="bg-lime-500 hover:bg-lime-700 text-white font-medium py-2 px-4 rounded-lg">
+                Contact
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto px-4 py-6">
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-xl font-bold mb-6">About {workerData.name}</h2>
+          <div className="space-y-6">
+            {/* Bio */}
+            <div>
+              <h3 className="font-medium text-gray-700 mb-2">Bio</h3>
+              <p className="text-gray-600">{workerData.description}</p>
+            </div>
+
+            {/* Details Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Professional Info */}
+              <div>
+                <h3 className="font-medium text-gray-700 mb-2">Professional Information</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-center text-gray-600">
+                    <Briefcase size={18} className="mr-2 text-gray-500" />
+                    Experience: {workerData.exp} years
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <Award size={18} className="mr-2 text-gray-500" />
+                    Affiliated to: {workerData.affiliatedTo}
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <MapPin size={18} className="mr-2 text-gray-500" />
+                    Area: {workerData.geography}
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div>
+                <h3 className="font-medium text-gray-700 mb-2">Contact Information</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-center text-gray-600">
+                    <MapPin size={18} className="mr-2 text-gray-500" />
+                    {workerData.address}
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <Briefcase size={18} className="mr-2 text-gray-500" />
+                    {workerData.email}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Verification Status */}
+            {workerData.Government_ID && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="flex items-center">
+                  <Award size={20} className="text-green-600 mr-2" />
+                  <span className="text-green-800 font-medium">Verified Professional</span>
+                </div>
+                <p className="text-green-700 text-sm mt-1">
+                  This social worker has been verified with government ID
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

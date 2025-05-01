@@ -1,21 +1,29 @@
+import { FileVideo, VideoIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+
 
 const Navbar = () => {
     return (
         <div>
-            <header className="flex flex-wrap lg:justify-start lg:flex-nowrap z-50 w-full py-7">
-                <nav className="relative max-w-7xl w-full flex flex-wrap lg:grid lg:grid-cols-12 basis-full items-center px-4 md:px-6 lg:px-8 mx-auto">
-                    <div className="lg:col-span-3 flex items-center">
+            <header className="flex flex-wrap lg:justify-start lg:flex-nowrap z-50 w-full py-7 bg-white dark:bg-neutral-900 shadow-md dark:shadow-neutral-800">
+                <nav className="relative max-w-7xl w-full flex flex-wrap lg:grid lg:grid-cols-12 basis-full items-center px-4 md:px-8 lg:px-8 mx-auto">
+                    <div className="lg:col-span-3 items-center flex ">
                         {/* Logo */}
+                        <div className="size-14">
+                            <img src="./SAHYOGI LOGO.gif" alt="Logo"  />
+                            
+                            </div>
+
                         <Link
                             className="flex-none rounded-xl text-3xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
                             href="/"
                             aria-label="Preline"
+                    
 
                         >
                             <h1>SAHYOGI</h1>
-
+                            
                         </Link>
                         {/* End Logo */}
                         <div className="ms-1 sm:ms-2"></div>
@@ -100,7 +108,7 @@ const Navbar = () => {
                                     className="inline-block text-black text-lg hover:text-gray-600 focus:outline-hidden focus:text-gray-600 dark:text-black dark:hover:text-neutral-300 dark:focus:text-neutral-300"
                                     href="/explore"
                                 >
-                                    Explore Social workers
+                                    Explore
                                 </Link>
                             </div>
                             <div>
@@ -124,7 +132,15 @@ const Navbar = () => {
                                     className="inline-block text-black text-lg hover:text-gray-600 focus:outline-hidden focus:text-gray-600 dark:text-black dark:hover:text-neutral-300 dark:focus:text-neutral-300"
                                     href="/awareness"
                                 >
-                                    Awareness Blog
+                                    Awareness
+                                </Link>
+                            </div>
+                            <div>
+                                <Link
+                                    className="inline-block text-black text-lg hover:text-gray-600 focus:outline-hidden focus:text-gray-600 dark:text-black dark:hover:text-neutral-300 dark:focus:text-neutral-300"
+                                    href="/feedback"
+                                >
+                                Feedback
                                 </Link>
                             </div>
                         </div>

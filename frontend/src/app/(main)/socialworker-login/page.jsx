@@ -3,7 +3,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-const Ngologin = () => {
+const Socialworkerlogin = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -11,7 +11,7 @@ const Ngologin = () => {
       password: '',
       confirmPassword: '',
     },
-    validationSchema: Yup.object({
+     validationSchema: Yup.object({
       name: Yup.string().required('Name is required'),
       email: Yup.string().email('Invalid email address').required('Email is required'),
       password: Yup.string()
@@ -21,7 +21,7 @@ const Ngologin = () => {
         .oneOf([Yup.ref('password'), null], 'Passwords must match')
         .required('Confirm Password is required'),
     }),
-    onSubmit: (values) => {
+      onSubmit:async (values) => {
       console.log('Form Data:', values);
       // Add your form submission logic here
     },
@@ -30,8 +30,8 @@ const Ngologin = () => {
   return (
     
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800">NGO Login</h2>
+      <div className="w-full max-w-md p-6 space-y-6 bg-white rounded shadow-md">
+        <h2 className="text-2xl font-bold text-center text-gray-800">Social worker Login</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -118,4 +118,4 @@ const Ngologin = () => {
   );
 };
 
-export default Ngologin;
+export default Socialworkerlogin;

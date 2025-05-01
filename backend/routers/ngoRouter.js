@@ -29,6 +29,14 @@ router.get('/getbyemail/:email', (req, res) => {
   res.send('respond from user getbyemail');
 });
 
+router.get('/getbyid/:id', (req, res) => {
+  Model.findById(req.params.id)
+    .then((result) => {
+      if (result) res.status(200).json(result);
+      else res.status(404).json({ message: 'NGO not found' });
+    })
+    .catch((err) => res.status(500).json(err));
+});
 
 //getall
 
