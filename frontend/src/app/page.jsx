@@ -4,7 +4,7 @@ import React from 'react'
 const Home = () => {
   return (
     <div>
-        <>
+       <>
           {/* Hero */}
           <div className="relative overflow-hidden">
             {/* Gradients */}

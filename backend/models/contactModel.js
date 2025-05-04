@@ -1,6 +1,6 @@
 const {Schema, model}= require('../connection');
 
-const mySchema = new Schema({
+const contactSchema = new Schema({
      fullName :{ type:String},
      email : {type: String, unique : true},
       phone: { type:Number, unique : true},
@@ -11,4 +11,4 @@ const mySchema = new Schema({
       document:{ type:String},
       createdAt : {type: Date, default: Date.now}
 });
-module.exports = model('contact',mySchema);
+module.exports = model('contact',contactSchema);
