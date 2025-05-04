@@ -58,8 +58,11 @@ const FeedbackPage = () => {
   };
 
   return (
-    
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="relative h-screen">
+      <img src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg" 
+      className="absolute inset-0 object-cover w-full h-full" alt="" />
+      {/* <div className=" h-full py-10"></div> */}
+    <div className="relative min-h-screen bg-opacity-75 bg-lime-500/70 py-12">
       <div className="container mx-auto px-4 max-w-2xl">
       
         <div className="bg-white rounded-lg shadow-lg p-8">
@@ -180,6 +183,7 @@ const FeedbackPage = () => {
               Submit Feedback
             </button>
           </form>
+        </div>
         </div>
       </div>
     </div>
