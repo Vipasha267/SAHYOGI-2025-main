@@ -1,56 +1,71 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 
 const Ngologin = () => {
+  const router = useRouter();
+  const [loginError, setLoginError] = useState(null);
+  
   const formik = useFormik({
     initialValues: {
-      name: '',
       email: '',
       password: '',
-      confirmPassword: '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('Name is required'),
       email: Yup.string().email('Invalid email address').required('Email is required'),
       password: Yup.string()
-        .min(6, 'Password must be at least 6 characters')
         .required('Password is required'),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Confirm Password is required'),
     }),
-    onSubmit: (values) => {
-      console.log('Form Data:', values);
-      // Add your form submission logic here
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        setLoginError(null);
+        console.log('Login attempt:', values.email);
+        
+        const response = await fetch('http://localhost:5000/ngo/authenticate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: values.email,
+            password: values.password
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          console.log('Login successful');
+          // Store the token in localStorage
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('userType', 'ngo');
+          
+          // Redirect to dashboard
+          router.push('/ngo-dashboard');
+        } else {
+          setLoginError(data.message || 'Login failed. Please check your credentials.');
+        }
+      } catch (error) {
+        console.error('Authentication error:', error);
+        setLoginError('An error occurred during login. Please try again.');
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
   return (
-    
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">NGO Login</h2>
-        <form onSubmit={formik.handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Enter your name"
-              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.name}
-            />
-            {formik.touched.name && formik.errors.name ? (
-              <p className="mt-1 text-xs text-red-500">{formik.errors.name}</p>
-            ) : null}
+        
+        {loginError && (
+          <div className="p-3 text-sm text-red-700 bg-red-100 rounded">
+            {loginError}
           </div>
+        )}
+        
+        <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
@@ -87,34 +102,20 @@ const Ngologin = () => {
               <p className="mt-1 text-xs text-red-500">{formik.errors.password}</p>
             ) : null}
           </div>
-          <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm your password"
-              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmPassword}
-            />
-            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-              <p className="mt-1 text-xs text-red-500">{formik.errors.confirmPassword}</p>
-            ) : null}
-          </div>
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-lime-500 rounded-md hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-lime-500"
+            disabled={formik.isSubmitting}
           >
-            Login
+            {formik.isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
+        
+        <div className="text-center text-sm text-gray-500">
+          <p>Don't have an account? <a href="/ngo-register" className="text-lime-600 hover:underline">Register</a></p>
+        </div>
       </div>
     </div>
-  
   );
 };
 
