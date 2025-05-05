@@ -6,7 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { Play, BookOpen, Users, Heart, Mail } from 'lucide-react';
 
-const AwarenessPage = () => {
+const postsPage = () => {
   const [articles, setArticles] = useState([]);
   const [successStories, setSuccessStories] = useState([]);
   const [activeTab, setActiveTab] = useState('articles');
@@ -130,7 +130,7 @@ const AwarenessPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className=" min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -179,6 +179,7 @@ const AwarenessPage = () => {
               Volunteer Guides
             </button>
           </nav>
+        </div>
         </div>
 
         {/* Content Section */}
@@ -281,8 +282,8 @@ const AwarenessPage = () => {
           </form>
         </div>
       </div>
-    </div>
+    
   );
 };
 
-export default AwarenessPage;
+export default postsPage;
