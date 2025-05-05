@@ -34,13 +34,19 @@ const Navbar = () => {
                             href="/signup"
                             className="py-2 px-3 inline-flex items-center gap-x-2 text-lg font-medium text-nowrap rounded-xl bg-lime-400 border border-lime-500 text-black  hover:bg-lime-500 focus:outline-hidden focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:hover:bg-green/10 dark:text-black dark:hover:text-black dark:focus:text-green-700"
                         >
-                            Register to Sahyogi
+                            Register 
                         </Link>
                         <Link
                             href="/login"
                             className="py-2 px-3 inline-flex items-center gap-x-2 text-lg font-medium text-nowrap rounded-xl border border-transparent bg-lime-400 text-black hover:bg-lime-500 focus:outline-hidden focus:bg-lime-500 transition disabled:opacity-50 disabled:pointer-events-none"
                         >
-                            Login to Sahyogi
+                            Login
+                        </Link>
+                        <Link
+                            href="/define"
+                            className="py-2 px-3 inline-flex items-center gap-x-2 text-lg font-medium text-nowrap rounded-xl border border-transparent bg-lime-400 text-black hover:bg-lime-500 focus:outline-hidden focus:bg-lime-500 transition disabled:opacity-50 disabled:pointer-events-none"
+                        >
+                            Become a Sahyogi
                         </Link>
                         <div className="lg:hidden">
                             <button
@@ -94,15 +100,7 @@ const Navbar = () => {
                         aria-labelledby="hs-navbar-hcail-collapse"
                     >
                         <div className="flex flex-col gap-y-4 gap-x-0 mt-5 lg:flex-row lg:justify-center lg:items-center lg:gap-y-0 lg:gap-x-7 lg:mt-0">
-                            <div>
-                                <Link
-                                    className="relative inline-block text-black text-lg focus:outline-hidden before:absolute before:bottom-0.5 before:start-0 before:-z-1 before:w-full before:h-1 before:bg-lime-400 dark:text-black"
-                                    href="#"
-                                    aria-current="page"
-                                >
-                                    Work
-                                </Link>
-                            </div>
+                            
                             <div>
                                 <Link
                                     className="inline-block text-black text-lg hover:text-gray-600 focus:outline-hidden focus:text-gray-600 dark:text-black dark:hover:text-neutral-300 dark:focus:text-neutral-300"
@@ -116,7 +114,7 @@ const Navbar = () => {
                                     className="inline-block text-black text-lg hover:text-gray-600 focus:outline-hidden focus:text-gray-600 dark:text-black dark:hover:text-neutral-300 dark:focus:text-neutral-300"
                                     href="/about"
                                 >
-                                    About Us
+                                    About
                                 </Link>
                             </div>
                             <div>

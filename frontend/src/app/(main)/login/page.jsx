@@ -186,6 +186,12 @@ const Login = () => {
                   Terms and Conditions
                 </a>
               </label>
+              <a
+                  className="ml-66 text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
+                  href="ngo-login"
+                >
+                  Are you a Sahyogi?
+                </a>
             </div>
           </div>
           {/* End Checkbox */}
