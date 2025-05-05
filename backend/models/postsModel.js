@@ -9,7 +9,10 @@ const postsSchema = new Schema({
   },
   content: { type: String }, // For articles, stories, guides
   mediaUrl: { type: String }, // For videos, infographics
-  author: { type: String },
+  // User information fields
+  author: { type: String }, // Name of the author
+  authorId: { type: Schema.Types.ObjectId, required: true }, // Reference to the user
+  authorType: { type: String, enum: ['socialworker', 'ngo'], required: true }, // Type of user
   date: { type: Date, default: Date.now },
   tags: [{ type: String }],
   // Optional fields for engagement

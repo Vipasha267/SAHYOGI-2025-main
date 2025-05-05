@@ -6,6 +6,7 @@ const SocialworkerRouter = require('./routers/socialworkerRouter');
 const contactRouter = require('./routers/contactRouter');
 const feedbackRouter = require('./routers/feedbackRouter');
 const casemanagementRouter = require('./routers/casemanagementRouter');
+const postsRouter = require('./routers/postsRouter');
 const cors = require('cors');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/socialworker',SocialworkerRouter);
 app.use('/contact',contactRouter);
 app.use('/feedback',feedbackRouter);
 app.use('/casemanagement',casemanagementRouter);
+app.use('/posts',postsRouter);
 //endpoint or root
 app.get('/',(req,res) =>{
 res.send('response from express');
