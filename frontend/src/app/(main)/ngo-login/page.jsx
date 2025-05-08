@@ -41,7 +41,7 @@ const Ngologin = () => {
           localStorage.setItem('userType', 'ngo');
           
           // Redirect to dashboard
-          router.push('/ngo-dashboard');
+          router.push('/ngo/profile');
         } else {
           setLoginError(data.message || 'Login failed. Please check your credentials.');
         }
