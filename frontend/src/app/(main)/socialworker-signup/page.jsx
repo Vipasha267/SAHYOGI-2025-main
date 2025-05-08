@@ -40,8 +40,9 @@ const SocialworkerSignup = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full p-8 space-y-4 bg-white rounded shadow-md">
+    <div className="flex items-center justify-center min h-screen bg-gray-100">
+      
+      <div className="w-200 p-8 space-y-4 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-black">Social Worker Signup</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
@@ -214,7 +215,7 @@ const SocialworkerSignup = () => {
           </button>
         </form>
       </div>
-    </div>
+      </div>
     
   );
 };

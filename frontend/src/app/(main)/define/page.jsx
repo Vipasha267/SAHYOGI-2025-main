@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import { Container } from 'lucide-react';
 
 export default function DefinePage() {
   const formik = useFormik({
@@ -28,24 +29,12 @@ export default function DefinePage() {
       <form onSubmit={formik.handleSubmit} className="flex gap-12">
 
         {/* NGO Box */}
-        <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center w-64">
-          <h2 className="text-xl font-bold mb-4">Are you an NGO?</h2>
-          <Link
-
-            type="button"
-            href="/ngo-signup"
-            className="bg-lime-600 text-white px-6 py-2 rounded hover:bg-lime-700 transition"
-            onClick={() => {
-              formik.setFieldValue('role', 'ngo');
-              formik.handleSubmit();
-            }}
-          >
-            I am an NGO
-          </Link>
-        </div>
-        {/* Social Worker Box */}
-        <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center w-64">
-          <h2 className="text-xl font-bold mb-4">Are you a Social Worker?</h2>
+        <div className="flex flex-col">
+      
+        <div className="bg-white rounded-lg shadow-lg p-5 flex flex-col items-center justify-center h-150 w-150">
+        <h2 className="text-3xl font-bold mb-4">Are you an NGO?</h2>
+        <img src="ngo1.jpg" alt="NGO" className="w-120 h-90 mb-4" />
+          
           <Link
 
             type="button"
@@ -57,11 +46,35 @@ export default function DefinePage() {
               formik.handleSubmit();
             }}
           >
-            I am a Social Worker
+           <h2 className="text-xl font-bold mb-4">I am an NGO</h2>
           </Link>
+        </div>
         </div>
-      </form>
-    </div>
-    </div>
+        {/* Social Worker Box */}
+        <div className="flex flex-col">
+        <div className="bg-white rounded-lg shadow-lg flex flex-col items-center justify-center h-150 w-150">
+        <h2 className="text-3xl font-bold mb-4">Are you a Social worker?</h2>
+        <img src="sw1.webp" alt="Social Worker" className="w-110 h-90 mb-4" />
+          
+          <Link
+             
+            type="button"
+
+            className="bg-lime-600 text-white px-6 py-2 rounded hover:bg-lime-700 transition"
+            href="/socialworker-signup"
+            onClick={() => {
+              formik.setFieldValue('role', 'socialworker');
+              formik.handleSubmit();
+            }}
+          >
+           <h2 className="text-xl font-bold mb-4">I am a Social Worker</h2>
+          </Link>
+        </div>
+        </div>
+         </form>
+         </div>
+         </div>
+    
+    
   );
 }
