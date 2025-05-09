@@ -1,75 +1,213 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Building, MapPin, Briefcase, Clock, Bookmark, Calendar, User, Users } from 'lucide-react';
+import { Building, MapPin, Briefcase, Clock, Bookmark, Calendar, User, Users, MessageCircle, Eye, ThumbsUp, ExternalLink } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
 
 export default function NGOProfile() {
+  const router = useRouter();
   const [ngoData, setNgoData] = useState(null);
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [activeTab, setActiveTab] = useState('about');
-
+  const [loading, setLoading] = useState(true);
+  const [postsLoading, setPostsLoading] = useState(false);
+  const [userId, setUserId] = useState(null);
+  
   useEffect(() => {
-    // In a real app, this would be an API call to fetch NGO data
-    setNgoData({
-      name: "Save The Children",
-      email: "contact@savethechildren.org",
-      Role: "organization",
-      bio: "Working to improve the lives of children around the world through better education, health care, and economic opportunities.",
-      Government_ID: 123456789,
-      address: "123 Charity Way, New York, NY 10001",
-      type_of_SocialWork: "Child welfare & education",
-      year_of_experience: 15,
-      ngo_name: "Save The Children Foundation",
-      ngo_Registration_Number: 987654321,
-      geographic_area_of_Work: "Global, with focus on developing countries",
-      proof_of_work: "Annual impact reports available on website",
-      createdAt: "2010-06-12T00:00:00Z"
-    });
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    const userType = localStorage.getItem('userType');
+    
+    if (!token || userType !== 'ngo') {
+      router.push('/ngo-login');
+      return;
+    }
 
-    // Mock data for posts
-    setPosts([
-      {
-        id: 1,
-        title: "School Building Project Completed",
-        content: "We're proud to announce the completion of our newest school building project in rural Tanzania. This school will serve over 300 children who previously had to walk more than 5 miles to access education.",
-        date: "2024-04-15T09:00:00Z",
-        likes: 156,
-        comments: 24
-      },
-      {
-        id: 2,
-        title: "Volunteers Needed for Summer Camp",
-        content: "We're looking for dedicated volunteers to help with our annual summer camp for underprivileged children. The camp runs for 3 weeks in July and provides educational activities, sports, and meals.",
-        date: "2024-04-10T14:30:00Z",
-        likes: 89,
-        comments: 32
-      },
-      {
-        id: 3,
-        title: "Fundraising Goal Reached!",
-        content: "Thanks to the generosity of our supporters, we've reached our quarterly fundraising goal! These funds will help us expand our nutrition program to 5 additional communities.",
-        date: "2024-04-05T11:15:00Z",
-        likes: 215,
-        comments: 47
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Decode token to get user ID
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(window.atob(base64));
+        const loggedInUserId = payload._id;
+        setUserId(loggedInUserId);
+        
+        // Fetch NGO data
+        const ngoResponse = await axios.get(`http://localhost:5000/ngo/getbyid/${loggedInUserId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setNgoData(ngoResponse.data);
+        
+        // Fetch posts by this NGO
+        setPostsLoading(true);
+        const postsResponse = await axios.get(`http://localhost:5000/posts/getbyauthor/${loggedInUserId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setPosts(postsResponse.data);
+        setPostsLoading(false);
+        
+        // For future implementation - fetch followers
+        // const followersResponse = await axios.get(`http://localhost:5000/followers/getbyngo/${loggedInUserId}`);
+        // setFollowers(followersResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // If token is invalid, redirect to login
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('userType');
+          router.push('/ngo-login');
+        }
+      } finally {
+        setLoading(false);
       }
-    ]);
+    };
 
-    // Mock data for followers
-    setFollowers([
-      { id: 1, name: "Jane Doe", type: "user" },
-      { id: 2, name: "John Smith", type: "socialworker" },
-      { id: 3, name: "Mary Johnson", type: "user" },
-      { id: 4, name: "David Lee", type: "socialworker" }
-    ]);
-  }, []);
+    fetchData();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lime-500"></div>
+        <p className="ml-3 text-lg text-gray-700">Loading profile...</p>
+      </div>
+    );
+  }
 
   if (!ngoData) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+    return <div className="flex justify-center items-center h-screen">NGO profile not found. Please login again.</div>;
   }
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+  
+  // Function to truncate text with ellipsis
+  const truncateText = (text, maxLength = 150) => {
+    if (!text || text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + '...';
+  };
+
+  // Function to determine post icon based on type
+  const getPostIcon = (type) => {
+    switch (type) {
+      case 'article':
+        return <Briefcase className="text-blue-500" size={18} />;
+      case 'story':
+        return <MessageCircle className="text-green-500" size={18} />;
+      case 'guide':
+        return <Calendar className="text-purple-500" size={18} />;
+      case 'video':
+        return <Users className="text-red-500" size={18} />;
+      case 'infographic':
+        return <Clock className="text-amber-500" size={18} />;
+      default:
+        return <Bookmark className="text-gray-500" size={18} />;
+    }
+  };
+
+  // Function to check if URL is a video
+  const isVideoUrl = (url) => {
+    if (!url) return false;
+    return url.match(/\.(mp4|webm|ogg)$/) || 
+           url.includes('youtube.com') || 
+           url.includes('youtu.be') || 
+           url.includes('vimeo.com');
+  };
+
+  // Function to get YouTube embed URL
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return null;
+    
+    // Handle youtu.be format
+    if (url.includes('youtu.be/')) {
+      const id = url.split('youtu.be/')[1].split('?')[0];
+      return `https://www.youtube.com/embed/${id}`;
+    }
+    
+    // Handle youtube.com/watch format
+    if (url.includes('youtube.com/watch')) {
+      const urlObj = new URL(url);
+      const id = urlObj.searchParams.get('v');
+      return `https://www.youtube.com/embed/${id}`;
+    }
+    
+    return url; // Return original if not YouTube
+  };
+
+  // Function to render media based on type and URL
+  const renderMedia = (post) => {
+    const { mediaUrl, type, featuredImage } = post;
+    
+    if (!mediaUrl && !featuredImage) return null;
+    
+    const displayUrl = mediaUrl || featuredImage;
+    
+    // Handle videos
+    if (type === 'video' || isVideoUrl(displayUrl)) {
+      if (displayUrl.includes('youtube.com') || displayUrl.includes('youtu.be')) {
+        const embedUrl = getYouTubeEmbedUrl(displayUrl);
+        return (
+          <div className="aspect-w-16 aspect-h-9 mb-4 rounded-lg overflow-hidden">
+            <iframe
+              src={embedUrl}
+              title="Video content"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            ></iframe>
+          </div>
+        );
+      } else if (displayUrl.match(/\.(mp4|webm|ogg)$/)) {
+        return (
+          <video 
+            controls 
+            className="w-full rounded-lg mb-4 max-h-96"
+            poster={post.thumbnailUrl}
+          >
+            <source src={displayUrl} type={`video/${displayUrl.split('.').pop()}`} />
+            Your browser does not support the video tag.
+          </video>
+        );
+      }
+    }
+    
+    // Handle images
+    if (displayUrl.match(/\.(jpeg|jpg|png|gif|webp)$/i) || type === 'infographic') {
+      return (
+        <div className="mb-4 rounded-lg overflow-hidden">
+          <img 
+            src={displayUrl}
+            alt={post.title}
+            className="w-full object-cover rounded-lg max-h-96"
+          />
+        </div>
+      );
+    }
+    
+    // For other file types like PDFs, show a link
+    return (
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
+        <a 
+          href={displayUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center text-blue-600 hover:text-blue-800"
+        >
+          <ExternalLink size={18} className="mr-2" />
+          View attached media
+        </a>
+      </div>
+    );
   };
 
   return (
@@ -86,10 +224,12 @@ export default function NGOProfile() {
               <p className="text-gray-600">{ngoData.type_of_SocialWork}</p>
               <p className="text-sm text-gray-500">Active since {formatDate(ngoData.createdAt)}</p>
             </div>
-            <div className="mt-4 md:mt-0">
-              <button className="bg-lime-500 hover:bg-lime-700 text-white font-medium py-2 px-4 rounded-lg">
-                Follow
-              </button>
+            <div className="mt-4 md:mt-0 space-x-2">
+              <Link href="/ngo/edit-profile">
+                <button className="bg-white border border-lime-500 text-lime-500 hover:bg-lime-50 font-medium py-2 px-4 rounded-lg">
+                  Edit Profile
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -112,7 +252,7 @@ export default function NGOProfile() {
               ? 'border-b-2 border-lime-500 text-lime-600' 
               : 'text-gray-600'}`}
           >
-            Posts
+            Posts {posts.length > 0 && <span className="ml-2 px-2 py-0.5 text-xs bg-gray-200 rounded-full">{posts.length}</span>}
           </button>
           <button
             onClick={() => setActiveTab('followers')}
@@ -134,7 +274,7 @@ export default function NGOProfile() {
             <div className="space-y-6">
               <div>
                 <h3 className="font-medium text-gray-700 mb-2">Bio</h3>
-                <p className="text-gray-600">{ngoData.bio}</p>
+                <p className="text-gray-600">{ngoData.bio || 'No bio available.'}</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -143,7 +283,7 @@ export default function NGOProfile() {
                   <ul className="space-y-2">
                     <li className="flex items-center text-gray-600">
                       <MapPin size={18} className="mr-2 text-gray-500" />
-                      {ngoData.address}
+                      {ngoData.address || 'Address not provided'}
                     </li>
                     <li className="flex items-center text-gray-600">
                       <Briefcase size={18} className="mr-2 text-gray-500" />
@@ -161,11 +301,11 @@ export default function NGOProfile() {
                     </li>
                     <li className="flex items-center text-gray-600">
                       <MapPin size={18} className="mr-2 text-gray-500" />
-                      {ngoData.geographic_area_of_Work}
+                      {ngoData.geographic_area_of_Work || 'Geographic area not specified'}
                     </li>
                     <li className="flex items-center text-gray-600">
                       <Clock size={18} className="mr-2 text-gray-500" />
-                      {ngoData.year_of_experience} years of experience
+                      {ngoData.year_of_experience || '0'} years of experience
                     </li>
                   </ul>
                 </div>
@@ -173,7 +313,7 @@ export default function NGOProfile() {
               
               <div>
                 <h3 className="font-medium text-gray-700 mb-2">Proof of Work</h3>
-                <p className="text-gray-600">{ngoData.proof_of_work}</p>
+                <p className="text-gray-600">{ngoData.proof_of_work || 'No proof of work provided.'}</p>
               </div>
             </div>
           </div>
@@ -182,28 +322,122 @@ export default function NGOProfile() {
         {/* Posts Tab */}
         {activeTab === 'posts' && (
           <div className="space-y-6">
-            {posts.map(post => (
-              <div key={post.id} className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-bold text-lg">{post.title}</h3>
-                  <span className="text-sm text-gray-500">{formatDate(post.date)}</span>
+            {/* Add Post Button - Top for visibility */}
+            <div className="flex justify-end mb-4">
+              <Link href="/ngo-profile/add-post">
+                <button className="bg-lime-500 hover:bg-lime-600 text-white px-4 py-2 rounded-md flex items-center">
+                  <span className="mr-2">+</span> Create New Post
+                </button>
+              </Link>
+            </div>
+          
+            {postsLoading ? (
+              <div className="bg-white rounded-lg shadow p-6 text-center">
+                <div className="flex justify-center items-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lime-500"></div>
                 </div>
-                <p className="text-gray-600 mb-4">{post.content}</p>
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <div className="flex space-x-4">
-                    <span className="flex items-center text-gray-500 text-sm">
-                      <Bookmark size={16} className="mr-1" /> {post.likes} likes
-                    </span>
-                    <span className="flex items-center text-gray-500 text-sm">
-                      <Calendar size={16} className="mr-1" /> {post.comments} comments
-                    </span>
-                  </div>
-                  <button className="text-lime-600 text-sm font-medium hover:text-lime-800">
-                    View Post
-                  </button>
-                </div>
+                <p className="text-gray-500">Loading posts...</p>
               </div>
-            ))}
+            ) : posts.length === 0 ? (
+              <div className="bg-white rounded-lg shadow p-6 text-gray-500 text-center py-12">
+                <Bookmark size={40} className="mx-auto mb-4 text-gray-400" />
+                <p className="text-lg font-medium">No posts available</p>
+                <p className="mt-2">You haven't published any content yet.</p>
+                <Link href="/ngo-profile/add-post">
+                  <button className="mt-6 bg-lime-500 hover:bg-lime-600 text-white px-4 py-2 rounded-md">
+                    Create Your First Post
+                  </button>
+                </Link>
+              </div>
+            ) : (
+              posts.map(post => (
+                <div key={post._id} className="bg-white rounded-lg shadow overflow-hidden">
+                  {/* Post header */}
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center">
+                        {getPostIcon(post.type)}
+                        <span className="text-xs uppercase tracking-wide bg-gray-100 text-gray-700 px-2 py-1 rounded ml-2">
+                          {post.type}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <span className="text-sm text-gray-500 mr-3">{formatDate(post.date)}</span>
+                        <Link href={`/ngo-profile/edit-post/${post._id}`}>
+                          <button className="text-gray-500 hover:text-lime-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 20h9"></path>
+                              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                          </button>
+                        </Link>
+                      </div>
+                    </div>
+                    
+                    <h3 className="font-bold text-lg mb-2">{post.title}</h3>
+                    
+                    {/* Post tags */}
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {post.tags.map((tag, index) => (
+                          <span 
+                            key={index} 
+                            className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Display media content */}
+                    {renderMedia(post)}
+                    
+                    {/* Content preview */}
+                    {post.content && (
+                      <p className="text-gray-600 mb-4">{truncateText(post.content)}</p>
+                    )}
+                    
+                    {/* For success stories, show impact */}
+                    {post.type === 'story' && post.impact && (
+                      <div className="bg-green-50 border-l-4 border-green-400 p-3 mb-4">
+                        <p className="text-sm text-green-700">
+                          <span className="font-medium">Impact:</span> {truncateText(post.impact, 100)}
+                        </p>
+                      </div>
+                    )}
+                    
+                    {/* Organization for stories */}
+                    {post.type === 'story' && post.organization && (
+                      <div className="flex items-center text-sm text-gray-600 mb-4">
+                        <Users size={16} className="mr-2 text-gray-500" />
+                        <span>Organization: <span className="font-medium">{post.organization}</span></span>
+                      </div>
+                    )}
+                    
+                    {/* Engagement metrics and action button */}
+                    <div className="flex items-center justify-between pt-4 border-t">
+                      <div className="flex space-x-4">
+                        <span className="flex items-center text-gray-500 text-sm">
+                          <ThumbsUp size={16} className="mr-1" /> {post.likes || 0}
+                        </span>
+                        <span className="flex items-center text-gray-500 text-sm">
+                          <Eye size={16} className="mr-1" /> {post.views || 0}
+                        </span>
+                      </div>
+                      <div className="space-x-2">
+                        <Link 
+                          href={`/posts/${post._id}`}
+                          className="text-lime-600 text-sm font-medium hover:text-lime-800"
+                        >
+                          View Full Post
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
 
@@ -212,23 +446,11 @@ export default function NGOProfile() {
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold mb-6">Followers</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {followers.map(follower => (
-                <div key={follower.id} className="flex items-center p-4 border rounded-lg">
-                  <div className={`rounded-full p-3 mr-3 ${
-                    follower.type === 'user' ? 'bg-blue-100' : 'bg-purple-100'
-                  }`}>
-                    {follower.type === 'user' ? (
-                      <User size={20} className="text-lime-600" />
-                    ) : (
-                      <Users size={20} className="text-lime-700" />
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="font-medium">{follower.name}</h3>
-                    <p className="text-sm text-gray-500 capitalize">{follower.type}</p>
-                  </div>
-                </div>
-              ))}
+              <div className="text-gray-500 col-span-full text-center py-8">
+                <Users size={40} className="mx-auto mb-4 text-gray-400" />
+                <p className="text-lg font-medium">No followers yet</p>
+                <p className="mt-2">When people follow your NGO, they'll appear here.</p>
+              </div>
             </div>
           </div>
         )}
