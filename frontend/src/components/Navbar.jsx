@@ -128,7 +128,7 @@ const Navbar = () => {
                             <div>
                                 <Link
                                     className="inline-block text-black text-lg hover:text-gray-600 focus:outline-hidden focus:text-gray-600 dark:text-black dark:hover:text-neutral-300 dark:focus:text-neutral-300"
-                                    href="/awareness"
+                                    href="/Awareness"
                                 >
                                     Awareness
                                 </Link>
