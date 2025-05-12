@@ -40,7 +40,7 @@ const Socialworkerlogin = () => {
           localStorage.setItem('token', data.token);
           
           // Redirect to dashboard
-          router.push('/socialworker-dashboard');
+          router.push('/social-worker/profile');
         } else {
           setLoginError(data.message || 'Login failed. Please check your credentials.');
         }

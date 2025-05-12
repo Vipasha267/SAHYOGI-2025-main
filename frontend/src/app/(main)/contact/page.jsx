@@ -87,7 +87,7 @@ const ContactPage = () => {
         className="absolute inset-0 object-cover w-full h-full" alt="" />
       <div className="relative bg-opacity-75 bg-lime-500/70 min-h-screen flex items-center justify-center ">
         <div className="container mx-auto px-4 max-w-3xl">
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-white rounded-lg shadow-lg p-8 ">
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-gray-900">Contact Us</h1>
               <p className="mt-2 text-gray-600">

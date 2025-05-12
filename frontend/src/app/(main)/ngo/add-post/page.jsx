@@ -128,7 +128,7 @@ const NGOAddPost = () => {
         const data = await response.json();
 
         if (response.ok) {
-          router.push('/ngo-profile/posts');
+          router.push('/ngo/profile');
         } else {
           setError(data.message || 'Failed to create post');
         }

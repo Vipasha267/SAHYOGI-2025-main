@@ -40,9 +40,9 @@ export default function DefinePage() {
             type="button"
 
             className="bg-lime-600 text-white px-6 py-2 rounded hover:bg-lime-700 transition"
-            href="/socialworker-signup"
+            href="/ngo-signup"
             onClick={() => {
-              formik.setFieldValue('role', 'socialworker');
+              formik.setFieldValue('role', 'ngo');
               formik.handleSubmit();
             }}
           >
