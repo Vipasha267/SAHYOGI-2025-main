@@ -1,10 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { User, MapPin, Briefcase, Clock, Bookmark, Calendar, Users, MessageCircle, Eye, ThumbsUp, ExternalLink } from 'lucide-react';
+import { User, MapPin, Briefcase, Clock, Bookmark, Calendar, Users, MessageCircle, Eye, ThumbsUp, ExternalLink, UserPlus, UserMinus } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
 import Image from 'next/image';
+import { toast } from 'react-hot-toast';
 
 export default function SocialWorkerProfile() {
   const { id } = useParams();
@@ -16,11 +17,31 @@ export default function SocialWorkerProfile() {
   const [activeTab, setActiveTab] = useState('about');
   const [loading, setLoading] = useState(true);
   const [postsLoading, setPostsLoading] = useState(false);
+  const [followersLoading, setFollowersLoading] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followActionLoading, setFollowActionLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
+        
+        // Get the token from localStorage
+        const token = localStorage.getItem('token');
+        
+        // Decode token to get current user info
+        if (token) {
+          try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const userData = JSON.parse(window.atob(base64));
+            setCurrentUser(userData);
+          } catch (error) {
+            console.error('Error parsing token:', error);
+          }
+        }
+        
         // Fetch social worker data
         const workerResponse = await axios.get(`http://localhost:5000/socialworker/getbyid/${id}`);
         setWorkerData(workerResponse.data);
@@ -31,9 +52,19 @@ export default function SocialWorkerProfile() {
         setPosts(postsResponse.data);
         setPostsLoading(false);
         
-        // Later you can implement followers functionality
-        // const followersResponse = await axios.get(`http://localhost:5000/followers/getbysocialworker/${id}`);
-        // setFollowers(followersResponse.data);
+        // Fetch followers
+        if (activeTab === 'followers') {
+          await fetchFollowers();
+        }
+        
+        // Check if current user is following this social worker
+        if (token && userData) {
+          const isAlreadyFollowing = workerResponse.data.followers?.some(
+            follower => follower.followerId === userData._id
+          );
+          setIsFollowing(isAlreadyFollowing);
+        }
+        
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -42,7 +73,84 @@ export default function SocialWorkerProfile() {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, activeTab]);
+
+  const fetchFollowers = async () => {
+    try {
+      setFollowersLoading(true);
+      const followersResponse = await axios.get(`http://localhost:5000/socialworker/followers/${id}`);
+      setFollowers(followersResponse.data || []);
+    } catch (error) {
+      console.error('Error fetching followers:', error);
+      toast.error('Failed to load followers');
+    } finally {
+      setFollowersLoading(false);
+    }
+  };
+
+  const handleFollow = async () => {
+    if (!currentUser) {
+      toast.error('Please log in to follow social workers');
+      router.push('/login');
+      return;
+    }
+
+    try {
+      setFollowActionLoading(true);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        toast.error('Please log in to follow social workers');
+        router.push('/login');
+        return;
+      }
+
+      const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      };
+
+      if (isFollowing) {
+        // Unfollow
+        await axios.post(`http://localhost:5000/socialworker/unfollow/${id}`, {}, config);
+        setIsFollowing(false);
+        toast.success('Unfollowed successfully');
+        
+        // Update follower count in UI
+        setWorkerData(prev => ({
+          ...prev,
+          followerCount: prev.followerCount - 1
+        }));
+        
+        if (activeTab === 'followers') {
+          // Refresh followers list if we're on that tab
+          await fetchFollowers();
+        }
+      } else {
+        // Follow
+        await axios.post(`http://localhost:5000/socialworker/follow/${id}`, {}, config);
+        setIsFollowing(true);
+        toast.success('Now following this social worker');
+        
+        // Update follower count in UI
+        setWorkerData(prev => ({
+          ...prev,
+          followerCount: prev.followerCount + 1
+        }));
+        
+        if (activeTab === 'followers') {
+          // Refresh followers list if we're on that tab
+          await fetchFollowers();
+        }
+      }
+    } catch (error) {
+      console.error('Error following/unfollowing:', error);
+      toast.error(error.response?.data?.message || 'Failed to update follow status');
+    } finally {
+      setFollowActionLoading(false);
+    }
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -183,17 +291,73 @@ export default function SocialWorkerProfile() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="bg-purple-100 rounded-full p-6 mb-4 md:mb-0 md:mr-6">
-              <User size={64} className="text-lime-600" />
+              {workerData.profilePicture ? (
+                <img 
+                  src={workerData.profilePicture} 
+                  alt={workerData.name} 
+                  className="h-16 w-16 rounded-full object-cover"
+                />
+              ) : (
+                <User size={64} className="text-lime-600" />
+              )}
             </div>
             <div className="text-center md:text-left md:flex-1">
-              <h1 className="text-2xl font-bold">{workerData.name}</h1>
+              <div className="flex items-center">
+                <h1 className="text-2xl font-bold">{workerData.name}</h1>
+                {workerData.isVerified && (
+                  <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9z"></path>
+                    </svg>
+                    Verified
+                  </span>
+                )}
+              </div>
               <p className="text-gray-600">{workerData.geography}</p>
               <p className="text-sm text-gray-500">Active since {formatDate(workerData.createdAt)}</p>
+              <p className="text-sm text-gray-600 mt-1">
+                <span className="font-medium">{workerData.followerCount || 0}</span> followers
+              </p>
             </div>
             <div className="mt-4 md:mt-0">
-              <button className="bg-lime-500 hover:bg-lime-700 text-white font-medium py-2 px-4 rounded-lg">
-                Follow
-              </button>
+              {/* Render different button for own profile */}
+              {currentUser && currentUser._id === id ? (
+                <Link href="/social-worker/edit-profile">
+                  <button className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-lg">
+                    Edit Profile
+                  </button>
+                </Link>
+              ) : (
+                <button 
+                  className={`flex items-center font-medium py-2 px-4 rounded-lg ${
+                    isFollowing 
+                      ? 'bg-gray-100 hover:bg-gray-200 text-gray-800' 
+                      : 'bg-lime-500 hover:bg-lime-700 text-white'
+                  }`}
+                  onClick={handleFollow}
+                  disabled={followActionLoading}
+                >
+                  {followActionLoading ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Processing...
+                    </span>
+                  ) : isFollowing ? (
+                    <>
+                      <UserMinus size={16} className="mr-1" />
+                      Unfollow
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus size={16} className="mr-1" />
+                      Follow
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -219,12 +383,22 @@ export default function SocialWorkerProfile() {
             Posts {posts.length > 0 && <span className="ml-2 px-2 py-0.5 text-xs bg-gray-200 rounded-full">{posts.length}</span>}
           </button>
           <button
-            onClick={() => setActiveTab('followers')}
+            onClick={() => {
+              setActiveTab('followers');
+              // Fetch followers data when tab is clicked, if not already loaded
+              if (followers.length === 0 && !followersLoading) {
+                fetchFollowers();
+              }
+            }}
             className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'followers'
               ? 'border-b-2 border-lime-500 text-lime-600'
               : 'text-gray-600'}`}
           >
-            Followers
+            Followers {workerData.followerCount > 0 && 
+              <span className="ml-2 px-2 py-0.5 text-xs bg-gray-200 rounded-full">
+                {workerData.followerCount}
+              </span>
+            }
           </button>
         </div>
       </div>
@@ -378,13 +552,50 @@ export default function SocialWorkerProfile() {
         {activeTab === 'followers' && (
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-bold mb-6">Followers</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            {followersLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lime-500"></div>
+                <p className="ml-3 text-gray-500">Loading followers...</p>
+              </div>
+            ) : followers.length === 0 ? (
               <div className="text-gray-500 col-span-full text-center py-8">
                 <Users size={40} className="mx-auto mb-4 text-gray-400" />
                 <p className="text-lg font-medium">No followers yet</p>
                 <p className="mt-2">When people follow this social worker, they'll appear here.</p>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {followers.map((follower) => (
+                  <div key={follower.followerId} className="flex items-center p-4 border rounded-lg">
+                    <div className={`rounded-full p-3 mr-3 ${
+                      follower.followerType === 'user' ? 'bg-blue-100' : 
+                      follower.followerType === 'ngo' ? 'bg-green-100' : 'bg-purple-100'
+                    }`}>
+                      {follower.followerType === 'user' ? (
+                        <User size={20} className="text-lime-600" />
+                      ) : follower.followerType === 'ngo' ? (
+                        <Building size={20} className="text-green-600" />
+                      ) : (
+                        <Users size={20} className="text-lime-600" />
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="font-medium">
+                        <Link 
+                          href={`/${follower.followerType}/${follower.followerId}`}
+                          className="hover:text-lime-600"
+                        >
+                          {follower.followerName}
+                        </Link>
+                      </h3>
+                      <p className="text-sm text-gray-500 capitalize">{follower.followerType}</p>
+                      <p className="text-xs text-gray-500">Since {formatDate(follower.followedAt)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
