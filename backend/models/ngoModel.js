@@ -13,6 +13,31 @@ const mySchema = new Schema({
     ngo_Registration_Number:{type:Number,unique:true},
     geographic_area_of_Work:String,
     proof_of_work:String,
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    followers: [
+      {
+        followerId: { 
+          type: Schema.Types.ObjectId, 
+          required: true 
+        },
+        followerType: { 
+          type: String, 
+          enum: ['user', 'socialworker', 'ngo'],
+          required: true
+        },
+        followerName: { 
+          type: String,
+          required: true
+        },
+        followedAt: { 
+          type: Date, 
+          default: Date.now 
+        }
+      }
+    ],
+    followerCount: { 
+      type: Number, 
+      default: 0 
+    },
 });
 module.exports = model('ngo', mySchema);

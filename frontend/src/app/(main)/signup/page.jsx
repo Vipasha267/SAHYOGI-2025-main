@@ -4,8 +4,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const Signup = () => {
+
+  const router = useRouter();
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -31,7 +35,7 @@ const Signup = () => {
         console.log(res.status);
         console.log(res.data);
         toast.success('successfully');
-  
+        router.push('/login');
        } catch (error) {
         console.log(error);
         toast.error('Something went wrong');
