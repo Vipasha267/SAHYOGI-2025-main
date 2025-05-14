@@ -10,6 +10,7 @@ router.post('/add', (req, res) => {
     .then((result) => {
       res.status(200).json(result);
     }).catch((err) => {
+      console.log(err);
       res.status(500).json(err);
 
     });
@@ -43,13 +44,14 @@ router.delete('/delete/:id', (req, res) => {
       res.status(500).json(err);
     });
 });
+
 router.post('/authenticate', (req, res) => {
   Model.findOne(req.body)
     .then((result) => {
       if (result) {
         //login success - generate token
-        const { _id, name, email } = result;
-        const payload = { _id, name, email };
+        const { _id, name, email, role } = result;
+        const payload = { _id, name, email, role };
         jwt.sign(
           payload,
           process.env.JWT_SECRET,
@@ -60,7 +62,7 @@ router.post('/authenticate', (req, res) => {
               res.status(500).json(err);
             }
             else {
-              res.status(200).json({ token });
+              res.status(200).json({ token, role });
             }
 
           }

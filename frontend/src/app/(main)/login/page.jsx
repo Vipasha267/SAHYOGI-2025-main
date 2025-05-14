@@ -21,7 +21,11 @@ const Login = () => {
         console.log(result.data);
         localStorage.setItem('token', result.data.token);
         toast.success('Login successful');
-        router.push('/'); // Redirect to home page after successful login
+        if(result.data.role === 'admin') {
+          router.push('/admin/dashboard');
+        }else{
+          router.push('/');
+        }
       }).catch((error) => {
         console.log(error);
         toast.error('Login failed');
@@ -31,13 +35,13 @@ const Login = () => {
 })
 
   return (
-    <div className="relative h-screen">
+    <div className="relative min-h-screen">
       <img src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg" 
       className="absolute inset-0 object-cover w-full h-full" alt="" />
       <div className="relative bg-opacity-75 bg-lime-500/70 h-full py-10">
       
-      <div className=" mr-150 ml-150 bg-white border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
-  <div className="p-4 sm:p-7">
+      <div className="mx-4 sm:mx-auto max-w-md md:max-w-lg lg:max-w-xl bg-white border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
+  <div className="p-3 sm:p-5 md:p-7">
     <div className="text-center">
       <h1 className="block text-2xl font-bold text-black dark:text-black-200">
         Sign in
@@ -104,7 +108,7 @@ const Login = () => {
                 name="email"
                 onChange={loginForm.handleChange}
                 value={loginForm.values.email}
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+                className="w-full px-3 sm:px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
                 required=""
                 aria-describedby="email-error"
               />
@@ -141,7 +145,7 @@ const Login = () => {
                 name="password"
                 onChange={loginForm.handleChange}
                 value={loginForm.values.password}
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+                className="w-full px-3 sm:px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
                 required=""
                 aria-describedby="password-error"
               />
@@ -186,10 +190,7 @@ const Login = () => {
                   Terms and Conditions
                 </a>
               </label>
-              <a
-                  className="ml-66 text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                  href="ngo-login"
-                >
+              <a className="block mt-2 sm:mt-0 sm:ml-auto text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500" href="ngo-login">
                   Are you a Sahyogi?
                 </a>
             </div>
@@ -199,7 +200,7 @@ const Login = () => {
             type="submit"
             className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-lime-500 text-black hover:bg-lime-700 focus:outline-hidden focus:bg-lime-700 disabled:opacity-50 disabled:pointer-events-none"
           >
-            Sign up
+            Login
           </button>
         </div>
       </form>
