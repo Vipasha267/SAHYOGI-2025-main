@@ -40,9 +40,14 @@ const SocialworkerSignup = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min h-screen bg-gray-100">
-      
-      <div className="w-200 p-8 space-y-4 bg-white rounded-lg shadow-md">
+    <div className="relative min-h-screen flex items-center justify-center">
+      <img
+        src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg"
+        className="absolute inset-0 w-full h-full object-cover"
+        alt=""
+      />
+      <div className="absolute inset-0 bg-lime-500/70 bg-opacity-80"></div>
+      <div className="relative z-10 w-full mr-150 ml-150 p-8 space-y-4 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-black">Social Worker Signup</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
@@ -122,10 +127,10 @@ const SocialworkerSignup = () => {
               Address
             </label>
             <input
-              id="Address"
-              name="Address"
-              type="Address"
-              placeholder=" Enter your Address"
+              id="address"
+              name="address"
+              type="text"
+              placeholder="Enter your Address"
               className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -135,88 +140,90 @@ const SocialworkerSignup = () => {
               <p className="mt-1 text-xs text-red-500">{formik.errors.address}</p>
             ) : null}
           </div>
-                <div className="mb-4">
-                <label htmlFor="exp" className="block text-sm font-medium text-black">
-                Experience
-                </label>
-                <input
-                id="exp"
-                name="exp"
-                type="text"
-                placeholder="Enter your experience"
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.exp}
-                />
-                {formik.touched.exp && formik.errors.exp ? (
-                <p className="mt-1 text-xs text-red-500">{formik.errors.exp}</p>
-                ) : null}
-                </div>
-                <div className="mb-4">
-                <label htmlFor="geography" className="block text-sm font-medium text-black">
-                Geography
-                </label>
-                <input
-                id="geography"
-                name="geography"
-                type="text"
-                placeholder="Enter your working area"
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.geography}
-                />
-                {formik.touched.geography && formik.errors.geography ? (
-                <p className="mt-1 text-xs text-red-500">{formik.errors.geography}</p>
-                ) : null}
-                </div>
-                <div className="mb-4">
-                <label htmlFor="Description" className="block text-sm font-medium text-black">
-                Bio
-                </label>
-                <input
-                id="description"
-                name="description"
-                type="bio"
-                placeholder="write about yourself"
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.description}
-                />
-                {formik.touched.description && formik.errors.description ? (
-                <p className="mt-1 text-xs text-red-500">{formik.errors.description}</p>
-                ) : null}
-                </div>
-                <div className="mb-4">
-                <label htmlFor="Affiliated to" className="block text-sm font-medium text-black">
-                Affiliated to
-                </label>
-                <input
-                id="affiliated to"
-                name="affiliated to"
-                type="text"
-                placeholder="enter your affiliation"
-                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.affiliatedTo}
-                />
-                {formik.touched.affiliatedTo && formik.errors.affiliatedTo? (
-                <p className="mt-1 text-xs text-red-500">{formik.errors.affiliatedTo}</p>
-                ) : null}
-                </div>
+          <div className="mb-4">
+            <label htmlFor="exp" className="block text-sm font-medium text-black">
+              Experience
+            </label>
+            <input
+              id="exp"
+              name="exp"
+              type="text"
+              placeholder="Enter your experience"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.exp}
+            />
+            {formik.touched.exp && formik.errors.exp ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.exp}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="geography" className="block text-sm font-medium text-black">
+              Geography
+            </label>
+            <input
+              id="geography"
+              name="geography"
+              type="text"
+              placeholder="Enter your working area"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.geography}
+            />
+            {formik.touched.geography && formik.errors.geography ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.geography}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-sm font-medium text-black">
+              Bio
+            </label>
+            <input
+              id="description"
+              name="description"
+              type="text"
+              placeholder="Write about yourself"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.description}
+            />
+            {formik.touched.description && formik.errors.description ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.description}</p>
+            ) : null}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="affiliatedTo" className="block text-sm font-medium text-black">
+              Affiliated to
+            </label>
+            <input
+              id="affiliatedTo"
+              name="affiliatedTo"
+              type="text"
+              placeholder="Enter your affiliation"
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-lime-500"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.affiliatedTo}
+            />
+            {formik.touched.affiliatedTo && formik.errors.affiliatedTo ? (
+              <p className="mt-1 text-xs text-red-500">{formik.errors.affiliatedTo}</p>
+            ) : null}
+          </div>
           <button
             type="submit"
             className="w-full px-4 py-2 text-black bg-lime-500 rounded-md hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-lime-500"
           >
             Sign Up
           </button>
+          <div className="text-center text-sm text-gray-500">
+             <p>you already have an account ? <a href="/socialworker-login" className="text-lime-600 hover:underline">Login</a></p>
+           </div>
         </form>
       </div>
-      </div>
-    
+    </div>
   );
 };
 

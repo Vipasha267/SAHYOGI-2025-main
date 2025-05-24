@@ -36,12 +36,12 @@ const Ngologin = () => {
         
         if (response.ok) {
           console.log('Login successful');
-          // Store the token in localStorage
+          // Store the token and userType in localStorage
           localStorage.setItem('token', data.token);
           localStorage.setItem('userType', 'ngo');
           
           // Redirect to dashboard
-          router.push('/ngo/profile');
+          router.push('/ngoo/profile');
         } else {
           setLoginError(data.message || 'Login failed. Please check your credentials.');
         }
@@ -55,8 +55,14 @@ const Ngologin = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-md">
+    <div className="relative min-h-screen flex items-center justify-center">
+      <img
+        src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg"
+        className="absolute inset-0 w-full h-full object-cover"
+        alt=""
+      />
+      <div className="absolute inset-0 bg-lime-500/70 bg-opacity-80"></div>
+      <div className="relative z-10 w-full max-w-md p-8 space-y-4 bg-white rounded-xl shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">NGO Login</h2>
         
         {loginError && (

@@ -34,39 +34,21 @@ const postsPage = () => {
   });
 
   useEffect(() => {
-    // In a real app, these would be API calls
-    // Mock data for now
-    setArticles([
-      {
-        id: 1,
-        title: "Understanding Social Work Impact",
-        category: "Education",
-        author: "Dr. Sarah Johnson",
-        date: "2025-04-20",
-        content: "Social work plays a crucial role in community development...",
-        image: "https://example.com/social-work-1.jpg"
-      },
-      {
-        id: 2,
-        title: "Mental Health in Communities",
-        category: "Health",
-        author: "Mark Wilson",
-        date: "2025-04-18",
-        content: "The importance of mental health support in social work...",
-        image: "https://example.com/mental-health.jpg"
+    // Fetch articles and success stories from backend
+    const fetchPosts = async () => {
+      try {
+        // Fetch articles
+        const articlesRes = await axios.get('http://localhost:5000/posts/getall?type=article');
+        setArticles(articlesRes.data);
+        // Fetch success stories
+        const storiesRes = await axios.get('http://localhost:5000/posts/getall?type=story');
+        setSuccessStories(storiesRes.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+        toast.error('Failed to load posts');
       }
-    ]);
-
-    setSuccessStories([
-      {
-        id: 1,
-        title: "Transforming Lives: The Street Children Project",
-        organization: "Child Care NGO",
-        impact: "Helped 500+ children",
-        content: "Through dedicated effort and community support...",
-        image: "https://example.com/success-1.jpg"
-      }
-    ]);
+    };
+    fetchPosts();
   }, []);
 
   const volunteerGuides = [
@@ -183,7 +165,7 @@ const postsPage = () => {
         </div>
 
         {/* Content Section */}
-        <div className="mb-16">
+        <div className="mb-16 container mx-auto px-4">
           {activeTab === 'articles' && renderArticles()}
           {activeTab === 'success' && renderSuccessStories()}
           {activeTab === 'guides' && (

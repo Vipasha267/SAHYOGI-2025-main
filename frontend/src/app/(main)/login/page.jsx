@@ -20,8 +20,10 @@ const Login = () => {
       .then((result) => {
         console.log(result.data);
         localStorage.setItem('token', result.data.token);
+        localStorage.setItem('userType', 'user'); // Store user type
         toast.success('Login successful');
         if(result.data.role === 'admin') {
+          localStorage.setItem('userType', 'admin'); // Store admin type
           router.push('/admin/dashboard');
         }else{
           router.push('/');
@@ -29,16 +31,15 @@ const Login = () => {
       }).catch((error) => {
         console.log(error);
         toast.error('Login failed');
-      // Perform login action here
-    })
-  },
-})
+      })
+    },
+  })
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative h-screen">
       <img src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg" 
       className="absolute inset-0 object-cover w-full h-full" alt="" />
-      <div className="relative bg-opacity-75 bg-lime-500/70 h-full py-10">
+      <div className="relative bg-opacity-75 bg-lime-500/70 h-full py-10"> 
       
       <div className="mx-4 sm:mx-auto max-w-md md:max-w-lg lg:max-w-xl bg-white border border-gray-200 rounded-xl shadow-2xs dark:bg-neutral-900 dark:border-neutral-700">
   <div className="p-3 sm:p-5 md:p-7">

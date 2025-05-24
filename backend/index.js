@@ -13,29 +13,31 @@ const app = express();
 
 const port = process.env.PORT || 5000;
 //middleware
-app.use(cors({ origin : '*'}))
+app.use(cors({ origin: '*' }))
 app.use(express.json());
-app.use('/user',UserRouter);
-app.use('/ngo',NGORouter);
-app.use('/socialworker',SocialworkerRouter);
-app.use('/contact',contactRouter);
-app.use('/feedback',feedbackRouter);
-app.use('/casemanagement',casemanagementRouter);
-app.use('/posts',postsRouter);
+
+app.use('/user', UserRouter);
+app.use('/ngo', NGORouter);
+app.use('/socialworker', SocialworkerRouter);
+app.use('/contact', contactRouter);
+app.use('/feedback', feedbackRouter);
+app.use('/casemanagement', casemanagementRouter);
+app.use('/posts', postsRouter);
+
 //endpoint or root
-app.get('/',(req,res) =>{
-res.send('response from express');
+app.get('/', (req, res) => {
+    res.send('response from express');
 });
 
-app.get('/add', (req,res) =>{
+app.get('/add', (req, res) => {
     res.send('response from add');
 });
-app.get('/getall',(req,res) => {
+app.get('/getall', (req, res) => {
     res.send('response from getall');
 })
 //getall
 //delete
 
 app.listen(port, () => {
-console.log('server started');
+    console.log('server started');
 });

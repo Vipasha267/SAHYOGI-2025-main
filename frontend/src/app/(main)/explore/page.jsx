@@ -70,6 +70,8 @@ const ExplorePage = () => {
 
       const allSahyogis = [...ngos, ...workers];
       setSahyogis(allSahyogis);
+      console.log(allSahyogis);
+      
       setFilteredSahyogis(allSahyogis);
       setLoading(false);
     } catch (error) {
@@ -156,7 +158,7 @@ const ExplorePage = () => {
         </div>
         <Link
           href={sahyogi.type === 'ngo' 
-            ? `/ngo-profile/${sahyogi._id}` 
+            ? `/ngo/${sahyogi._id}`
             : `/socialworker/${sahyogi._id}`}
           className="text-lime-600 hover:text-lime-700 font-medium text-sm"
         >

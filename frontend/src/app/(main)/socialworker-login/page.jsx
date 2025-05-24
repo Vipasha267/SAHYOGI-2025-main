@@ -36,8 +36,9 @@ const Socialworkerlogin = () => {
         
         if (response.ok) {
           console.log('Login successful');
-          // Store the token in localStorage
+          // Store the token and userType in localStorage
           localStorage.setItem('token', data.token);
+          localStorage.setItem('userType', 'socialworker');
           
           // Redirect to dashboard
           router.push('/social-worker/profile');
@@ -54,8 +55,14 @@ const Socialworkerlogin = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 space-y-6 bg-white rounded shadow-md">
+    <div className="relative min-h-screen flex items-center justify-center">
+      <img
+        src="https://ofhsoupkitchen.org/wp-content/uploads/2024/01/how-to-help-others-2.jpg"
+        className="absolute inset-0 w-full h-full object-cover"
+        alt=""
+      />
+      <div className="absolute inset-0 bg-lime-500/70 bg-opacity-80"></div>
+      <div className="relative z-10 w-full max-w-md p-6 space-y-6 bg-white rounded-xl shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">Social Worker Login</h2>
         
         {loginError && (
@@ -111,7 +118,7 @@ const Socialworkerlogin = () => {
         </form>
         
         <div className="text-center text-sm text-gray-500">
-          <p>Don't have an account? <a href="/socialworker-register" className="text-lime-600 hover:underline">Register</a></p>
+          <p>Don't have an account? <a href="/socialworker-signup" className="text-lime-600 hover:underline">signup</a></p>
         </div>
       </div>
     </div>

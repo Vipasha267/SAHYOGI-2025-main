@@ -30,10 +30,19 @@ router.get('/getbyemail/:email', (req, res) => {
   res.send('respond from user getbyemail');
 });
 
+router.get('/getbyid/:id', async (req, res) => {
+  try {
+    const result = await Model.findById(req.params.id);
+    if (!result) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(result);
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).json({ message: 'Error fetching user data', error: err.message });
+  }
+});
 
-//getall
-
-//getbyid
 //update
 router.delete('/delete/:id', (req, res) => {
   Model.findByIdAndDelete(req.params.id)
@@ -77,6 +86,46 @@ router.post('/authenticate', (req, res) => {
       res.status(500).json(err);
 
     });
-})
+});
+
+router.get('/followed-ngos/:id', async (req, res) => {
+  try {
+    const user = await Model.findById(req.params.id).populate('followedNGOs');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user.followedNGOs || []);
+  } catch (err) {
+    console.error('Error fetching followed NGOs:', err);
+    res.status(500).json({ message: 'Error fetching followed NGOs', error: err.message });
+  }
+});
+
+router.get('/followed-socialworkers/:id', async (req, res) => {
+  try {
+    const user = await Model.findById(req.params.id).populate('followedSocialWorkers');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user.followedSocialWorkers || []);
+  } catch (err) {
+    console.error('Error fetching followed social workers:', err);
+    res.status(500).json({ message: 'Error fetching followed social workers', error: err.message });
+  }
+});
+
+router.get('/interactions/:id', async (req, res) => {
+  try {
+    const user = await Model.findById(req.params.id).populate('interactions');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user.interactions || []);
+  } catch (err) {
+    console.error('Error fetching interactions:', err);
+    res.status(500).json({ message: 'Error fetching interactions', error: err.message });
+  }
+});
+
 //delete
 module.exports = router;

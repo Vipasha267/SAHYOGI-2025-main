@@ -90,7 +90,7 @@ const Signup = () => {
                   </a>
                 </div>
                 <div className="w-full max-w-xl xl:px-8 xl:w-5/12">
-                  <div className="bg-white rounded shadow-2xl p-7 sm:p-10">
+                  <div className="bg-white rounded-xl shadow-2xl p-7 sm:p-10">
                     <h3 className="mb-4 text-black text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">
                       Sign up
                     </h3>
@@ -187,9 +187,15 @@ const Signup = () => {
                           Sign Up
                         </button>
                       </div>
-                      <p className="text-xs text-gray-600 sm:text-sm">
-                        We respect your privacy. Unsubscribe at any time.
-                      </p>
+                      <p className="text-sm text-gray-600 text-center">
+                        Already have an account?{' '}
+                        <a
+                          href="/login"
+                          className="text-lime-500 hover:underline"
+                        >
+                          Login
+                        </a>
+                        </p>
                     </form>
                   </div>
                 </div>

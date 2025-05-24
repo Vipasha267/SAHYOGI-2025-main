@@ -73,11 +73,11 @@ export default function NGOProfile() {
     fetchData();
   }, [router]);
 
-  if (loading) {
+  if (loading || !ngoData) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lime-500"></div>
-        <p className="ml-3 text-lg text-gray-700">Loading profile...</p>
+        <p className="mt-4 text-gray-600 font-medium">Loading profile...</p>
       </div>
     );
   }

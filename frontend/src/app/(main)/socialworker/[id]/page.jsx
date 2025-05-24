@@ -1,10 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { User, MapPin, Briefcase, Clock, Bookmark, Calendar, Users, MessageCircle, Eye, ThumbsUp, ExternalLink, UserPlus, UserMinus } from 'lucide-react';
+import { Users, User, Building, MapPin, Calendar, MessageCircle, Eye, ThumbsUp, UserPlus, UserMinus } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link';
-import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 
 export default function SocialWorkerProfile() {
@@ -27,15 +26,14 @@ export default function SocialWorkerProfile() {
       try {
         setLoading(true);
         
-        // Get the token from localStorage
         const token = localStorage.getItem('token');
+        let userData = null;
         
-        // Decode token to get current user info
         if (token) {
           try {
             const base64Url = token.split('.')[1];
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const userData = JSON.parse(window.atob(base64));
+            userData = JSON.parse(window.atob(base64));
             setCurrentUser(userData);
           } catch (error) {
             console.error('Error parsing token:', error);
@@ -52,14 +50,14 @@ export default function SocialWorkerProfile() {
         setPosts(postsResponse.data);
         setPostsLoading(false);
         
-        // Fetch followers
+        // Fetch followers if on followers tab
         if (activeTab === 'followers') {
           await fetchFollowers();
         }
         
         // Check if current user is following this social worker
-        if (token && userData) {
-          const isAlreadyFollowing = workerResponse.data.followers?.some(
+        if (token && userData && workerResponse.data.followers) {
+          const isAlreadyFollowing = workerResponse.data.followers.some(
             follower => follower.followerId === userData._id
           );
           setIsFollowing(isAlreadyFollowing);
@@ -67,6 +65,7 @@ export default function SocialWorkerProfile() {
         
       } catch (error) {
         console.error('Error fetching data:', error);
+        toast.error('Failed to load profile data');
       } finally {
         setLoading(false);
       }
@@ -90,8 +89,13 @@ export default function SocialWorkerProfile() {
 
   const handleFollow = async () => {
     if (!currentUser) {
-      toast.error('Please log in to follow social workers');
-      router.push('/login');
+      const userType = localStorage.getItem('userType');
+      if (!userType) {
+        toast.error('Please log in to follow social workers');
+        router.push('/login');
+        return;
+      }
+      router.push(`/${userType}-login`);
       return;
     }
 
@@ -100,7 +104,7 @@ export default function SocialWorkerProfile() {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        toast.error('Please log in to follow social workers');
+        toast.error('Authentication required');
         router.push('/login');
         return;
       }
@@ -112,176 +116,56 @@ export default function SocialWorkerProfile() {
       };
 
       if (isFollowing) {
-        // Unfollow
+        // Unfollow action
         await axios.post(`http://localhost:5000/socialworker/unfollow/${id}`, {}, config);
         setIsFollowing(false);
-        toast.success('Unfollowed successfully');
+        toast.success(`Unfollowed ${workerData.name}`);
         
         // Update follower count in UI
         setWorkerData(prev => ({
           ...prev,
-          followerCount: prev.followerCount - 1
+          followerCount: Math.max((prev.followerCount || 0) - 1, 0)
         }));
         
         if (activeTab === 'followers') {
-          // Refresh followers list if we're on that tab
           await fetchFollowers();
         }
       } else {
-        // Follow
+        // Follow action
         await axios.post(`http://localhost:5000/socialworker/follow/${id}`, {}, config);
         setIsFollowing(true);
-        toast.success('Now following this social worker');
+        toast.success(`Now following ${workerData.name}`);
         
         // Update follower count in UI
         setWorkerData(prev => ({
           ...prev,
-          followerCount: prev.followerCount + 1
+          followerCount: (prev.followerCount || 0) + 1
         }));
         
         if (activeTab === 'followers') {
-          // Refresh followers list if we're on that tab
           await fetchFollowers();
         }
       }
     } catch (error) {
-      console.error('Error following/unfollowing:', error);
+      console.error('Error with follow action:', error);
       toast.error(error.response?.data?.message || 'Failed to update follow status');
     } finally {
       setFollowActionLoading(false);
     }
   };
 
-  if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  }
-
-  if (!workerData) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Social Worker not found.</div>;
+  if (loading || !workerData) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-lime-500"></div>
+        <p className="mt-4 text-gray-600 font-medium">Loading social worker profile...</p>
+      </div>
+    );
   }
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
-  // Function to truncate text with ellipsis
-  const truncateText = (text, maxLength = 150) => {
-    if (!text || text.length <= maxLength) return text;
-    return text.slice(0, maxLength) + '...';
-  };
-
-  // Function to determine post icon based on type
-  const getPostIcon = (type) => {
-    switch (type) {
-      case 'article':
-        return <Briefcase className="text-blue-500" size={18} />;
-      case 'story':
-        return <MessageCircle className="text-green-500" size={18} />;
-      case 'guide':
-        return <Calendar className="text-purple-500" size={18} />;
-      case 'video':
-        return <Users className="text-red-500" size={18} />;
-      case 'infographic':
-        return <Clock className="text-amber-500" size={18} />;
-      default:
-        return <Bookmark className="text-gray-500" size={18} />;
-    }
-  };
-
-  // Function to check if URL is a video
-  const isVideoUrl = (url) => {
-    if (!url) return false;
-    return url.match(/\.(mp4|webm|ogg)$/) || 
-           url.includes('youtube.com') || 
-           url.includes('youtu.be') || 
-           url.includes('vimeo.com');
-  };
-
-  // Function to get YouTube embed URL
-  const getYouTubeEmbedUrl = (url) => {
-    if (!url) return null;
-    
-    // Handle youtu.be format
-    if (url.includes('youtu.be/')) {
-      const id = url.split('youtu.be/')[1].split('?')[0];
-      return `https://www.youtube.com/embed/${id}`;
-    }
-    
-    // Handle youtube.com format
-    if (url.includes('youtube.com/watch')) {
-      const urlObj = new URL(url);
-      const id = urlObj.searchParams.get('v');
-      return `https://www.youtube.com/embed/${id}`;
-    }
-    
-    return url; // Return original if not YouTube
-  };
-
-  // Function to render media based on type and URL
-  const renderMedia = (post) => {
-    const { mediaUrl, type, featuredImage } = post;
-    
-    if (!mediaUrl && !featuredImage) return null;
-    
-    const displayUrl = mediaUrl || featuredImage;
-    
-    // Handle videos
-    if (type === 'video' || isVideoUrl(displayUrl)) {
-      if (displayUrl.includes('youtube.com') || displayUrl.includes('youtu.be')) {
-        const embedUrl = getYouTubeEmbedUrl(displayUrl);
-        return (
-          <div className="aspect-w-16 aspect-h-9 mb-4 rounded-lg overflow-hidden">
-            <iframe
-              src={embedUrl}
-              title="Video content"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
-          </div>
-        );
-      } else if (displayUrl.match(/\.(mp4|webm|ogg)$/)) {
-        return (
-          <video 
-            controls 
-            className="w-full rounded-lg mb-4 max-h-96"
-            poster={post.thumbnailUrl}
-          >
-            <source src={displayUrl} type={`video/${displayUrl.split('.').pop()}`} />
-            Your browser does not support the video tag.
-          </video>
-        );
-      }
-    }
-    
-    // Handle images
-    if (displayUrl.match(/\.(jpeg|jpg|png|gif|webp)$/i) || type === 'infographic') {
-      return (
-        <div className="mb-4 rounded-lg overflow-hidden">
-          <img 
-            src={displayUrl}
-            alt={post.title}
-            className="w-full object-cover rounded-lg max-h-96"
-          />
-        </div>
-      );
-    }
-    
-    // For other file types like PDFs, show a link
-    return (
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-        <a 
-          href={displayUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center text-blue-600 hover:text-blue-800"
-        >
-          <ExternalLink size={18} className="mr-2" />
-          View attached media
-        </a>
-      </div>
-    );
   };
 
   return (
@@ -298,23 +182,23 @@ export default function SocialWorkerProfile() {
                   className="h-16 w-16 rounded-full object-cover"
                 />
               ) : (
-                <User size={64} className="text-lime-600" />
+                <Users size={64} className="text-purple-600" />
               )}
             </div>
             <div className="text-center md:text-left md:flex-1">
-              <div className="flex items-center">
+              <div className="flex items-center flex-wrap justify-center md:justify-start">
                 <h1 className="text-2xl font-bold">{workerData.name}</h1>
                 {workerData.isVerified && (
                   <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9z"></path>
                     </svg>
                     Verified
                   </span>
                 )}
               </div>
-              <p className="text-gray-600">{workerData.geography}</p>
-              <p className="text-sm text-gray-500">Active since {formatDate(workerData.createdAt)}</p>
+              <p className="text-gray-600">{workerData.description}</p>
+              <p className="text-sm text-gray-500">Member since {formatDate(workerData.createdAt)}</p>
               <p className="text-sm text-gray-600 mt-1">
                 <span className="font-medium">{workerData.followerCount || 0}</span> followers
               </p>
@@ -368,7 +252,7 @@ export default function SocialWorkerProfile() {
         <div className="flex border-b overflow-x-auto">
           <button
             onClick={() => setActiveTab('about')}
-            className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'about'
+            className={`px-4 py-2 font-medium ${activeTab === 'about'
               ? 'border-b-2 border-lime-500 text-lime-600'
               : 'text-gray-600'}`}
           >
@@ -376,7 +260,7 @@ export default function SocialWorkerProfile() {
           </button>
           <button
             onClick={() => setActiveTab('posts')}
-            className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'posts'
+            className={`px-4 py-2 font-medium ${activeTab === 'posts'
               ? 'border-b-2 border-lime-500 text-lime-600'
               : 'text-gray-600'}`}
           >
@@ -385,12 +269,11 @@ export default function SocialWorkerProfile() {
           <button
             onClick={() => {
               setActiveTab('followers');
-              // Fetch followers data when tab is clicked, if not already loaded
               if (followers.length === 0 && !followersLoading) {
                 fetchFollowers();
               }
             }}
-            className={`px-4 py-2 font-medium whitespace-nowrap ${activeTab === 'followers'
+            className={`px-4 py-2 font-medium ${activeTab === 'followers'
               ? 'border-b-2 border-lime-500 text-lime-600'
               : 'text-gray-600'}`}
           >
@@ -424,7 +307,7 @@ export default function SocialWorkerProfile() {
                       {workerData.address || 'Address not provided'}
                     </li>
                     <li className="flex items-center text-gray-600">
-                      <Briefcase size={18} className="mr-2 text-gray-500" />
+                      <Calendar size={18} className="mr-2 text-gray-500" />
                       {workerData.email}
                     </li>
                   </ul>
@@ -434,15 +317,15 @@ export default function SocialWorkerProfile() {
                   <h3 className="font-medium text-gray-700 mb-2">Professional Details</h3>
                   <ul className="space-y-2">
                     <li className="flex items-center text-gray-600">
-                      <Users size={18} className="mr-2 text-gray-500" />
-                      Affiliated with: {workerData.affiliatedTo}
+                      <Building size={18} className="mr-2 text-gray-500" />
+                      Affiliated to: {workerData.affiliatedTo || 'Independent'}
                     </li>
                     <li className="flex items-center text-gray-600">
                       <MapPin size={18} className="mr-2 text-gray-500" />
-                      Work Area: {workerData.geography || 'Not specified'}
+                      {workerData.geography || 'Geographic area not specified'}
                     </li>
                     <li className="flex items-center text-gray-600">
-                      <Clock size={18} className="mr-2 text-gray-500" />
+                      <Calendar size={18} className="mr-2 text-gray-500" />
                       {workerData.exp || '0'} years of experience
                     </li>
                   </ul>
@@ -457,74 +340,24 @@ export default function SocialWorkerProfile() {
           <div className="space-y-6">
             {postsLoading ? (
               <div className="bg-white rounded-lg shadow p-6 text-center">
-                <div className="flex justify-center items-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lime-500"></div>
-                </div>
-                <p className="text-gray-500">Loading posts...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-lime-500"></div>
+                <p className="mt-4 text-gray-500">Loading posts...</p>
               </div>
             ) : posts.length === 0 ? (
               <div className="bg-white rounded-lg shadow p-6 text-gray-500 text-center py-12">
-                <Bookmark size={40} className="mx-auto mb-4 text-gray-400" />
-                <p className="text-lg font-medium">No posts available.</p>
-                <p className="mt-2">This social worker hasn't published any content yet.</p>
+                <MessageCircle size={40} className="mx-auto mb-4 text-gray-400" />
+                <p className="text-lg font-medium">No posts yet</p>
+                <p className="mt-2">This social worker hasn't shared any content yet.</p>
               </div>
             ) : (
               posts.map(post => (
                 <div key={post._id} className="bg-white rounded-lg shadow overflow-hidden">
-                  {/* Post header */}
                   <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center">
-                        {getPostIcon(post.type)}
-                        <span className="text-xs uppercase tracking-wide bg-gray-100 text-gray-700 px-2 py-1 rounded ml-2">
-                          {post.type}
-                        </span>
-                      </div>
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-bold">{post.title}</h3>
                       <span className="text-sm text-gray-500">{formatDate(post.date)}</span>
                     </div>
-                    
-                    <h3 className="font-bold text-lg mb-2">{post.title}</h3>
-                    
-                    {/* Post tags */}
-                    {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {post.tags.map((tag, index) => (
-                          <span 
-                            key={index} 
-                            className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Display media content */}
-                    {renderMedia(post)}
-                    
-                    {/* Content preview */}
-                    {post.content && (
-                      <p className="text-gray-600 mb-4">{truncateText(post.content)}</p>
-                    )}
-                    
-                    {/* For success stories, show impact */}
-                    {post.type === 'story' && post.impact && (
-                      <div className="bg-green-50 border-l-4 border-green-400 p-3 mb-4">
-                        <p className="text-sm text-green-700">
-                          <span className="font-medium">Impact:</span> {truncateText(post.impact, 100)}
-                        </p>
-                      </div>
-                    )}
-                    
-                    {/* Organization for stories */}
-                    {post.type === 'story' && post.organization && (
-                      <div className="flex items-center text-sm text-gray-600 mb-4">
-                        <Users size={16} className="mr-2 text-gray-500" />
-                        <span>Organization: <span className="font-medium">{post.organization}</span></span>
-                      </div>
-                    )}
-                    
-                    {/* Engagement metrics and action button */}
+                    <p className="text-gray-600 mb-4">{post.content}</p>
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div className="flex space-x-4">
                         <span className="flex items-center text-gray-500 text-sm">
@@ -577,7 +410,7 @@ export default function SocialWorkerProfile() {
                       ) : follower.followerType === 'ngo' ? (
                         <Building size={20} className="text-green-600" />
                       ) : (
-                        <Users size={20} className="text-lime-600" />
+                        <Users size={20} className="text-purple-600" />
                       )}
                     </div>
                     <div>

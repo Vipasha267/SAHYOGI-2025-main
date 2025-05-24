@@ -5,14 +5,14 @@ const mySchema = new Schema({
     email: { type: String, unique: true },
     password: { type: String, required: true },   
     bio: String,
-    Government_ID:{type:Number, unique:true},
-    address:String,
-    type_of_SocialWork:String,
-    year_of_experience:Number,
-    ngo_name:String,
-    ngo_Registration_Number:{type:Number,unique:true},
-    geographic_area_of_Work:String,
-    proof_of_work:String,
+    Government_ID: { type: Number, unique: true },
+    address: String,
+    type_of_SocialWork: String,
+    year_of_experience: Number,
+    ngo_name: String,
+    ngo_Registration_Number: { type: Number, unique: true },
+    geographic_area_of_Work: String,
+    proof_of_work: String,
     createdAt: { type: Date, default: Date.now },
     followers: [
       {
@@ -39,5 +39,10 @@ const mySchema = new Schema({
       type: Number, 
       default: 0 
     },
+    isVerified: {
+      type: Boolean,
+      default: false
+    }
 });
+
 module.exports = model('ngo', mySchema);
