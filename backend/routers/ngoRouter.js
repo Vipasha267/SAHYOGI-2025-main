@@ -60,7 +60,7 @@ router.post('/authenticate', (req, res) => {
       if (result) {
         //login success - generate token
         const { _id, name, email, ngo_name } = result;
-        const payload = { _id, name, email, ngo_name, type: 'ngo' };
+        const payload = { _id, name, email, ngo_name, authorType: 'ngo' };  // Changed type to authorType
         jwt.sign(
           payload,
           process.env.JWT_SECRET,

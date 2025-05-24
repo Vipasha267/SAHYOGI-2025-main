@@ -9,7 +9,7 @@ router.post('/add', verifyToken, async (req, res) => {
     const caseData = {
       ...req.body,
       authorId: req.user._id,
-      authorType: req.user.type // 'ngo' or 'socialworker'
+      authorType: req.user.authorType // Changed from type to authorType
     };
 
     const newCase = new Model(caseData);
@@ -24,7 +24,7 @@ router.post('/add', verifyToken, async (req, res) => {
 // Get all cases (admin only)
 router.get('/getall', verifyToken, async (req, res) => {
   try {
-    if (req.user.type !== 'admin') {
+    if (req.user.authorType !== 'admin') {  // Changed from type to authorType
       return res.status(403).json({ message: 'Access denied' });
     }
     const cases = await Model.find().populate('affiliatedNGO', 'ngo_name');
@@ -37,7 +37,7 @@ router.get('/getall', verifyToken, async (req, res) => {
 // Get NGO cases
 router.get('/ngo/cases', verifyToken, async (req, res) => {
   try {
-    if (req.user.type !== 'ngo') {
+    if (req.user.authorType !== 'ngo') {  // Already updated
       return res.status(403).json({ message: 'Access denied' });
     }
     const cases = await Model.find({ authorId: req.user._id });
@@ -50,7 +50,7 @@ router.get('/ngo/cases', verifyToken, async (req, res) => {
 // Get social worker cases
 router.get('/socialworker/cases', verifyToken, async (req, res) => {
   try {
-    if (req.user.type !== 'socialworker') {
+    if (req.user.authorType !== 'socialworker') {  // Changed from type to authorType
       return res.status(403).json({ message: 'Access denied' });
     }
     const cases = await Model.find({ authorId: req.user._id })
@@ -61,7 +61,7 @@ router.get('/socialworker/cases', verifyToken, async (req, res) => {
   }
 });
 
-// Get case by ID (with auth check)
+// Get case by ID (with auth check) 
 router.get('/getbyid/:id', verifyToken, async (req, res) => {
   try {
     const case_ = await Model.findById(req.params.id)
@@ -72,9 +72,9 @@ router.get('/getbyid/:id', verifyToken, async (req, res) => {
     }
 
     // Check if user has access to this case
-    if (req.user.type === 'admin' || 
+    if (req.user.authorType === 'admin' ||  // Changed from type to authorType
         (case_.authorId.toString() === req.user._id.toString()) ||
-        (req.user.type === 'ngo' && case_.affiliatedNGO?._id.toString() === req.user._id.toString())) {
+        (req.user.authorType === 'ngo' && case_.affiliatedNGO?._id.toString() === req.user._id.toString())) {  // Changed from type to authorType
       res.status(200).json(case_);
     } else {
       res.status(403).json({ message: 'Access denied' });
@@ -93,7 +93,7 @@ router.put('/update/:id', verifyToken, async (req, res) => {
     }
 
     // Check if user has permission to update
-    if (case_.authorId.toString() !== req.user._id.toString() && req.user.type !== 'admin') {
+    if (case_.authorId.toString() !== req.user._id.toString() && req.user.authorType !== 'admin') {  // Changed from type to authorType
       return res.status(403).json({ message: 'Access denied' });
     }
 
@@ -117,7 +117,7 @@ router.delete('/delete/:id', verifyToken, async (req, res) => {
     }
 
     // Check if user has permission to delete
-    if (case_.authorId.toString() !== req.user._id.toString() && req.user.type !== 'admin') {
+    if (case_.authorId.toString() !== req.user._id.toString() && req.user.authorType !== 'admin') {  // Changed from type to authorType
       return res.status(403).json({ message: 'Access denied' });
     }
 
