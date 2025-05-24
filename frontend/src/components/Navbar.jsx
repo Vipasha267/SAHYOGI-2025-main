@@ -12,7 +12,7 @@ const Navbar = () => {
         // Check authentication status when component mounts
         const token = localStorage.getItem('token');
         const storedUserType = localStorage.getItem('userType');
-        
+
         if (token && storedUserType) {
             setIsLoggedIn(true);
             setUserType(storedUserType);
@@ -28,7 +28,7 @@ const Navbar = () => {
     };
 
     const getProfileLink = () => {
-        switch(userType) {
+        switch (userType) {
             case 'ngo':
                 return '/ngoo/profile';
             case 'socialworker':
@@ -79,6 +79,7 @@ const Navbar = () => {
                 {/* Desktop Nav Links */}
                 <div className="hidden lg:flex flex-1 items-center justify-center gap-x-7">
                     <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/explore">Explore</Link>
+                    <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/posts">Posts</Link>
                     <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/about">About</Link>
                     <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/contact">Contact</Link>
                     <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/feedback">Feedback</Link>
@@ -157,6 +158,7 @@ const Navbar = () => {
                             <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/about" onClick={() => setMenuOpen(false)}>About</Link>
                             <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
                             <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/feedback" onClick={() => setMenuOpen(false)}>Feedback</Link>
+                            <Link className="text-black text-lg hover:text-gray-600 dark:text-black dark:hover:text-neutral-300" href="/posts" onClick={() => setMenuOpen(false)}>Posts</Link>
                         </div>
                         <div className="flex flex-col gap-2 mt-2">
                             {!isLoggedIn ? (
