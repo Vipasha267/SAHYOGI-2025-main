@@ -44,6 +44,7 @@ const Dashboard = () => {
   const [socialWorkers, setSocialWorkers] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [stats, setStats] = useState({
     totalNGOs: 0,
     totalSocialWorkers: 0,
@@ -55,11 +56,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setError(null);
       try {
         const [ngoRes, workerRes, userRes] = await Promise.all([
-          axios.get('http://localhost:5000/ngo/getall'),
-          axios.get('http://localhost:5000/socialworker/getall'),
-          axios.get('http://localhost:5000/user/getall')
+          axios.get('http://localhost:5000/ngo/getall', { timeout: 5000 }),
+          axios.get('http://localhost:5000/socialworker/getall', { timeout: 5000 }),
+          axios.get('http://localhost:5000/user/getall', { timeout: 5000 })
         ]);
 
         setNgos(ngoRes.data);
@@ -76,6 +78,16 @@ const Dashboard = () => {
         });
       } catch (error) {
         console.error('Data fetch error:', error);
+        let errorMessage = 'Failed to fetch data. ';
+        if (error.code === 'ECONNABORTED') {
+          errorMessage += 'Request timed out. ';
+        }
+        if (!error.response) {
+          errorMessage += 'Could not connect to the server. Please check if the backend server is running.';
+        } else {
+          errorMessage += error.response.data?.message || error.message;
+        }
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -182,32 +194,21 @@ const Dashboard = () => {
     </DashboardCard>
   );
 
-  const renderUserCard = (user) => (
-    <DashboardCard key={user._id}>
-      <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-white">
-        <div className="flex items-center">
-          <div className="bg-blue-100 p-2 rounded-full">
-            <User size={20} className="text-blue-600" />
+  const renderUserCard = (user) => {
+    return (
+      <DashboardCard key={user._id}>
+        <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-white">
+          <div className="flex items-center">
+            <div className="bg-blue-100 p-2 rounded-full">
+              <User size={20} className="text-blue-600" />
+            </div>
+            <h3 className="ml-2.5 text-lg font-bold text-gray-800">{user.name}</h3>
           </div>
-          <h3 className="ml-2.5 text-lg font-bold text-gray-800">{user.name}</h3>
         </div>
-      </div>
-      
-      <div className="p-4 space-y-2.5">
-        <CardSection label="Email" value={user.email} icon={Mail} />
-        <CardSection 
-          label="Joined" 
-          value={new Date(user.createdAt).toLocaleDateString(undefined, {
-            year: 'numeric', month: 'short', day: 'numeric'
-          })} 
-          icon={Calendar} 
-        />
-        
-        <div className="flex justify-between items-center mt-4 pt-3 border-t">
+        <div className="p-4 flex justify-between items-center">
           <div className="text-xs text-gray-500">
-            User ID: {user._id.substring(0, 8)}...
+            User ID: {user._id ? user._id.substring(0, 8) : ''}...
           </div>
-          
           <button 
             className="px-2 py-1 text-xs font-medium text-blue-700 hover:bg-blue-50 rounded"
             onClick={() => window.open(`/admin/user/${user._id}`, '_blank')}
@@ -215,9 +216,9 @@ const Dashboard = () => {
             <Eye size={14} className="inline mr-1" /> View
           </button>
         </div>
-      </div>
-    </DashboardCard>
-  );
+      </DashboardCard>
+    );
+  };
 
   // Handler for verifying NGOs and social workers
   const handleVerify = async (type, id) => {

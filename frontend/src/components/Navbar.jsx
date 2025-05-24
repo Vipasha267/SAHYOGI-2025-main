@@ -30,7 +30,7 @@ const Navbar = () => {
     const getProfileLink = () => {
         switch(userType) {
             case 'ngo':
-                return '/ngoo/profile';
+                return '/ngo/profile';
             case 'socialworker':
                 return '/social-worker/profile';
             case 'admin':

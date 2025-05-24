@@ -59,8 +59,8 @@ router.post('/authenticate', (req, res) => {
     .then((result) => {
       if (result) {
         //login success - generate token
-        const { _id, name, email } = result;
-        const payload = { _id, name, email };
+        const { _id, name, email, ngo_name } = result;
+        const payload = { _id, name, email, ngo_name, type: 'ngo' };
         jwt.sign(
           payload,
           process.env.JWT_SECRET,
@@ -73,7 +73,6 @@ router.post('/authenticate', (req, res) => {
             else {
               res.status(200).json({ token });
             }
-
           }
         )
       }
@@ -84,7 +83,6 @@ router.post('/authenticate', (req, res) => {
     }).catch((err) => {
       console.log(err);
       res.status(500).json(err);
-
     });
 })
 
