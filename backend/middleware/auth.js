@@ -15,6 +15,7 @@ const verifyToken = (req, res, next) => {
     // Get token from header
     const authHeader = req.header('Authorization');
     
+    console.log('Token received:', authHeader); // Debugging line to check token
     if (!authHeader) {
       return res.status(401).json({ message: 'Access denied. No token provided' });
     }
@@ -23,7 +24,7 @@ const verifyToken = (req, res, next) => {
     const token = authHeader.startsWith('Bearer ') 
       ? authHeader.substring(7) 
       : authHeader;
-    
+      
     if (!token) {
       return res.status(401).json({ message: 'Access denied. No token provided' });
     }

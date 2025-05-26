@@ -10,6 +10,7 @@ const contactRouter = require('./routers/contactRouter');
 const feedbackRouter = require('./routers/feedbackRouter');
 const casemanagementRouter = require('./routers/casemanagementRouter');
 const postsRouter = require('./routers/postsRouter');
+const caseRouter = require('./routers/casemanagementRouter');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/contact', contactRouter);
 app.use('/feedback', feedbackRouter);
 app.use('/casemanagement', casemanagementRouter);
 app.use('/posts', postsRouter);
+app.use('/case', caseRouter);
 
 app.listen(port, () => {
     console.log('server started at port ' + port);

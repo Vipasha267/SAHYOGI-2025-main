@@ -6,18 +6,40 @@ const { verifyToken } = require('../middleware/auth');
 // Add new case (authenticated)
 router.post('/add', verifyToken, async (req, res) => {
   try {
-    const caseData = {
-      ...req.body,
-      authorId: req.user._id,
-      authorType: req.user.authorType // Changed from type to authorType
-    };
+    const {
+      caseTitle, caseType, location, startDate, endDate, caseStatus,
+      objective, workDescription, challenges, outcome,
+      photoUrls, videoUrls, peopleHelped, resourcesUsed,
+      volunteerSupport, isPublic, verificationStatus
+    } = req.body;
 
-    const newCase = new Model(caseData);
-    const result = await newCase.save();
-    res.status(200).json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Error creating case' });
+    const newCase = new Model({
+      caseTitle,
+      caseType,
+      location,
+      startDate,
+      endDate,
+      caseStatus,
+      objective,
+      workDescription,
+      challenges,
+      outcome,
+      photoUrls,
+      videoUrls,
+      peopleHelped,
+      resourcesUsed,
+      volunteerSupport,
+      isPublic,
+      verificationStatus,
+      authorId: req.user._id,
+      // authorType: req.user.authorType // Changed from type to authorType
+    });
+
+    await newCase.save();
+    res.status(201).json({ message: 'Case created successfully', caseId: newCase._id });
+  } catch (error) {
+    console.error('Error adding case:', error);
+    res.status(500).json({ message: 'Error creating case', error: error.message });
   }
 });
 

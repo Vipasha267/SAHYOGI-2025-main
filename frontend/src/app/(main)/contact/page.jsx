@@ -59,7 +59,7 @@ const ContactPage = () => {
           }
         });
 
-        await axios.post('http://localhost:5000/contact/submit', formData, {
+        await axios.post('http://localhost:5000/contact/add', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
