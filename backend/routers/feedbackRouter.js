@@ -10,6 +10,7 @@ router.post('/add', (req, res) => {
     .then((result) => {
       res.status(200).json(result);
     }).catch((err) => {
+      console.log('Error in feedbackRouter add:', err);
       res.status(500).json(err);
     });
 });

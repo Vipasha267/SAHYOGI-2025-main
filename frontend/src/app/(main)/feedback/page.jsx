@@ -34,7 +34,7 @@ const FeedbackPage = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        await axios.post('http://localhost:5000/feedback/submit', values);
+        await axios.post('http://localhost:5000/feedback/add', values);
         toast.success('Thank you for your feedback!');
         resetForm();
         setRating(0);

@@ -9,7 +9,7 @@ const feedbackSchema = new Schema({
     required: true
   },
   comment: { type: String, required: true, minlength: 10 },
-  suggestion: { type: String, minlength: 10 },
+  suggestion: { type: String },
   email: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
