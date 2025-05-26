@@ -4,15 +4,39 @@ const Model = require('../models/contactModel');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-router.post('/add', (req, res) => {
-  console.log(req.body);
-  new Model(req.body).save()
-    .then((result) => {
-      res.status(200).json(result);
-    }).catch((err) => {
-      res.status(500).json(err);
+// Contact Route
+router.post('/add', async (req, res) => {
+  try {
+    const {
+      fullName,
+      email,
+      phone,
+      subject,
+      message,
+      isSocialWorker,
+      inquiryType,
+      documentUrl,
+      documentName
+    } = req.body;
 
+    const newContact = new Model({
+      fullName,
+      email,
+      phone,
+      subject,
+      message,
+      isSocialWorker,
+      inquiryType,
+      documentUrl,
+      documentName
     });
+
+    await newContact.save();
+    res.status(201).json({ message: 'Contact form submitted successfully' });
+  } catch (error) {
+    console.error('Error submitting contact form:', error);
+    res.status(500).json({ message: 'Error submitting form', error: error.message });
+  }
 });
 
 router.get('/getall', (req, res) => {

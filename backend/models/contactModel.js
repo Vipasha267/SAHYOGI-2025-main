@@ -1,5 +1,6 @@
 const {Schema, model}= require('../connection');
 
+// Contact Model
 const contactSchema = new Schema({
      fullName :{ type:String},
      email : {type: String, unique : true},
@@ -9,6 +10,8 @@ const contactSchema = new Schema({
       isSocialWorker: { type:Boolean, default: false},
       inquiryType:{ type:String, enum: ['NGO', 'Social Worker', 'User'], default: 'User'},
       document:{ type:String},
+      documentUrl: String,
+      documentName: String,
       createdAt : {type: Date, default: Date.now}
 });
 module.exports = model('contact',contactSchema);
