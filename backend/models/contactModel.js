@@ -8,7 +8,7 @@ const contactSchema = new Schema({
       subject:{ type:String},
       message:{ type:String},
       isSocialWorker: { type:Boolean, default: false},
-      inquiryType:{ type:String, enum: ['NGO', 'Social Worker', 'User'], default: 'User'},
+      inquiryType:{ type:String, default: 'User'},
       document:{ type:String},
       documentUrl: String,
       documentName: String,
