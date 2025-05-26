@@ -110,162 +110,177 @@ const postsPage = () => {
       ))}
     </div>
   );
-
-  return (
-    <div className=" min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Awareness & Impact
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Discover stories of change, learn about social impact, and find ways to make a difference in your community.
-          </p>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="flex justify-center mb-12">
-          <nav className="flex space-x-4 bg-white p-2 rounded-lg shadow-sm">
-            <button
-              onClick={() => setActiveTab('articles')}
-              className={`px-4 py-2 rounded-md transition ${
-                activeTab === 'articles'
-                  ? 'bg-lime-500 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <BookOpen className="w-5 h-5 inline-block mr-2" />
-              Articles
-            </button>
-            <button
-              onClick={() => setActiveTab('success')}
-              className={`px-4 py-2 rounded-md transition ${
-                activeTab === 'success'
-                  ? 'bg-lime-500 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <Heart className="w-5 h-5 inline-block mr-2" />
-              Success Stories
-            </button>
-            <button
-              onClick={() => setActiveTab('guides')}
-              className={`px-4 py-2 rounded-md transition ${
-                activeTab === 'guides'
-                  ? 'bg-lime-500 text-white'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <Users className="w-5 h-5 inline-block mr-2" />
-              Volunteer Guides
-            </button>
-          </nav>
-        </div>
-        </div>
-
-        {/* Content Section */}
-        <div className="mb-16 container mx-auto px-4">
-          {activeTab === 'articles' && renderArticles()}
-          {activeTab === 'success' && renderSuccessStories()}
-          {activeTab === 'guides' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {volunteerGuides.map((guide, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
-                  <div className="text-lime-500 mb-4">
-                    {guide.icon}
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{guide.title}</h3>
-                  <p className="text-gray-600 mb-4">{guide.description}</p>
-                  <a
-                    href={guide.link}
-                    className="text-lime-600 hover:text-lime-700 font-medium inline-flex items-center"
-                  >
-                    Learn More
-                    <svg
-                      className="w-4 h-4 ml-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </a>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Newsletter Section */}
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
-          <div className="text-center mb-6">
-            <Mail className="w-12 h-12 text-lime-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Stay Updated</h2>
-            <p className="text-gray-600">
-              Subscribe to our newsletter for the latest articles, stories, and volunteer opportunities.
-            </p>
-          </div>
-
-          <form onSubmit={subscribeForm.handleSubmit} className="space-y-4">
-            <div>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
-                  subscribeForm.touched.email && subscribeForm.errors.email
-                    ? 'border-red-500'
-                    : 'border-gray-300'
-                }`}
-                onChange={subscribeForm.handleChange}
-                onBlur={subscribeForm.handleBlur}
-                value={subscribeForm.values.email}
-              />
-              {subscribeForm.touched.email && subscribeForm.errors.email && (
-                <p className="mt-1 text-sm text-red-500">{subscribeForm.errors.email}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-700">I'm interested in:</p>
-              <div className="grid grid-cols-2 gap-2">
-                {['Social Work', 'Community Events', 'Volunteer Opportunities', 'Success Stories'].map(
-                  (interest) => (
-                    <label key={interest} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        name="interests"
-                        value={interest}
-                        onChange={subscribeForm.handleChange}
-                        className="rounded text-lime-500 focus:ring-lime-500"
-                      />
-                      <span className="text-sm text-gray-600">{interest}</span>
-                    </label>
-                  )
-                )}
+  
+    return (
+      
+          <div className="min-h-screen bg-gray-50 py-12">
+            <div className="container mx-auto px-4">
+              {/* Hero Section */}
+              <div className="text-center mb-16">
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                  Empowering Change Through Stories
+                </h1>
+                <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                  Discover stories of change, learn about social impact, and find ways to make a difference in your community.
+                </p>
               </div>
-              {subscribeForm.touched.interests && subscribeForm.errors.interests && (
-                <p className="text-sm text-red-500">{subscribeForm.errors.interests}</p>
+  
+              {/* Navigation Tabs */}
+              <div className="flex justify-center mb-12">
+                <nav className="flex space-x-4 bg-white p-2 rounded-lg shadow-sm">
+                  <button
+                    onClick={() => setActiveTab('articles')}
+                    className={`px-4 py-2 rounded-md transition ${
+                      activeTab === 'articles'
+                        ? 'bg-lime-500 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <BookOpen className="w-5 h-5 inline-block mr-2" />
+                    Articles
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('success')}
+                    className={`px-4 py-2 rounded-md transition ${
+                      activeTab === 'success'
+                        ? 'bg-lime-500 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Heart className="w-5 h-5 inline-block mr-2" />
+                    Success Stories
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('guides')}
+                    className={`px-4 py-2 rounded-md transition ${
+                      activeTab === 'guides'
+                        ? 'bg-lime-500 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Users className="w-5 h-5 inline-block mr-2" />
+                    Volunteer Guides
+                  </button>
+                </nav>
+              </div>
+            </div>
+  
+            {/* Content Section */}
+            <div className="mb-16 container mx-auto px-4">
+              {activeTab === 'articles' && renderArticles()}
+              {activeTab === 'success' && renderSuccessStories()}
+              {activeTab === 'guides' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {volunteerGuides.map((guide, index) => (
+                    <div
+                      key={index}
+                      className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition"
+                    >
+                      <div className="text-lime-500 mb-4">{guide.icon}</div>
+                      <h3 className="text-xl font-bold mb-2">{guide.title}</h3>
+                      <p className="text-gray-600 mb-4">{guide.description}</p>
+                      <a
+                        href={guide.link}
+                        className="text-lime-600 hover:text-lime-700 font-medium inline-flex items-center"
+                      >
+                        Learn More
+                        <svg
+                          className="w-4 h-4 ml-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </a>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
-
-            <button
-              type="submit"
-              className="w-full bg-lime-500 text-white py-2 px-4 rounded-lg hover:bg-lime-600 transition-colors"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
+  
+            {/* Newsletter Section */}
+            <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
+              <div className="text-center mb-6">
+                <Mail className="w-12 h-12 text-lime-500 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold mb-2">Stay Updated</h2>
+                <p className="text-gray-600">
+                  Subscribe to our newsletter for the latest articles, stories, and volunteer opportunities.
+                </p>
+              </div>
+  
+              <form onSubmit={subscribeForm.handleSubmit} className="space-y-4">
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-lime-500 focus:border-transparent ${
+                      subscribeForm.touched.email && subscribeForm.errors.email
+                        ? 'border-red-500'
+                        : 'border-gray-300'
+                    }`}
+                    onChange={subscribeForm.handleChange}
+                    onBlur={subscribeForm.handleBlur}
+                    value={subscribeForm.values.email}
+                  />
+                  {subscribeForm.touched.email && subscribeForm.errors.email && (
+                    <p className="mt-1 text-sm text-red-500">{subscribeForm.errors.email}</p>
+                  )}
+                </div>
+  
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-700">
+                    I'm interested in:
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      'Social Work',
+                      'Community Events',
+                      'Volunteer Opportunities',
+                      'Success Stories',
+                    ].map((interest) => (
+                      <label
+                        key={interest}
+                        className="flex items-center space-x-2"
+                      >
+                        <input
+                          type="checkbox"
+                          name="interests"
+                          value={interest}
+                          onChange={subscribeForm.handleChange}
+                          className="rounded text-lime-500 focus:ring-lime-500"
+                        />
+                        <span className="text-sm text-gray-600">{interest}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {subscribeForm.touched.interests &&
+                    subscribeForm.errors.interests && (
+                      <p className="text-sm text-red-500">
+                        {subscribeForm.errors.interests}
+                      </p>
+                    )}
+                </div>
+  
+                <button
+                  type="submit"
+                  className="w-full bg-lime-500 text-white py-2 px-4 rounded-lg hover:bg-lime-600 transition-colors"
+                >
+                  Subscribe
+                </button>
+              </form>
+            </div>
+          </div>
+      
     
-  );
-};
-
-export default postsPage;
+    );
+  };
+  
+  export default postsPage;
+ 
